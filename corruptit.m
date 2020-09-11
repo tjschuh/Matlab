@@ -10,7 +10,7 @@ function A=corruptit(A,N)
 %
 % A      Channel-corruption of it
 %
-% TESTED ONN9.8.0.1451342 (R2020a) Update 5
+% TESTED ON 9.8.0.1451342 (R2020a) Update 5
 % 
 % Last modified by fjsimons-at-alum.mit.edu, 09/11/2020
 
