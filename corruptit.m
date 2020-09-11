@@ -14,7 +14,7 @@ function A=corruptit(A,N)
 % 
 % Last modified by fjsimons-at-alum.mit.edu, 09/11/2020
 
-defval('A',repmat([1 2 3 4],randi(1000),1))
+defval('A',repmat([1 2 3 4],randi(1000),1)')
 defval('N',3)
 
 % A random number of random numbers the size of A is used to skip
