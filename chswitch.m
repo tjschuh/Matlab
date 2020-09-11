@@ -1,0 +1,3 @@
+function chswitch
+%
+% detect when due to corruption channelse are switched, recursive...
