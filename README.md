@@ -1,3 +1,3 @@
 # MATLAB
 
-**corruptit.m**       Multichannel data drop simulator
+Repository containing MATLAB scripts. 
