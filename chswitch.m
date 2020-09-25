@@ -4,9 +4,8 @@
 % the jump and correctly adjust
 % the channel order
 
-%Things this could still can't do:
-%-if jump occurs in first or last data point, it will crash
-%-can only fix one jump per file (not recursive)
+% Things to improve:
+% -Not a function, still just a script
 
 OneChan = FourChan(1,:);
 D = diff(OneChan);
@@ -171,4 +170,9 @@ else
       BackPrime = Back;
 end
 
-shift = [FrontPrime BackPrime];
+FourChan = [FrontPrime BackPrime];
+
+clear Front
+clear Back
+clear FrontPrime
+clear BackPrime
