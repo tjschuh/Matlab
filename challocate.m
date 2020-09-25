@@ -2,18 +2,19 @@
 % It goes through each row of FourChan
 % and looks for the "Time" channel
 
-counter = 0;
-OneMat = ones(1,size(FourChan,2)); %builds an array of 1's with length=#ofCols of FourChan
+counter = 1;
+while counter < 2
+OneMat = ones(1,size(FourChan,2)); %builds an array of 1's with length=#ofCols of FourChan 
 for j = 1:4
     OneChan = FourChan(j,:);
     Low = (OneChan > 4900 & OneChan < 5400);
     High = (OneChan > 5400 & OneChan < 5700);
     if Low + High == OneMat
+       counter = 2;
        break
     else
       if j == 4
          %means there was a channel jump and we need to run chswitch.m
-         counter = 1;
          run chswitch.m
 	 break
       else
@@ -21,9 +22,7 @@ for j = 1:4
       end
     end	
 end
-
-if counter == 0
-j
+end
       
 % these if/else statements correctly organize the rows of the FourChan
 % matrix, creating the shift matrix in the process
@@ -46,8 +45,5 @@ elseif j == 4
       shift(4,:) = FourChan(1,:);
 else
       shift = FourChan;
-end
-else
-   % chswitch.m ran so shift was built in that script
 end
 	
