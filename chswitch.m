@@ -113,8 +113,8 @@ end
 OneMat = ones(1,size(Front,2)); %builds an array of 1's with length=#ofCols of Front
 for f = 1:4
     OneChan = Front(f,:);
-    Low = (OneChan > 4900 & OneChan < 5400);
-    High = (OneChan > 5400 & OneChan < 5700);
+    Low = (OneChan > 4900 & OneChan <= 5300);
+    High = (OneChan > 5300 & OneChan < 5700);
     if Low + High == OneMat
        break
     else
@@ -150,14 +150,14 @@ while buff == 0
 OneMat = ones(1,size(Back,2)); %builds an array of 1's with length=#ofCols of Back
 for b = 1:4
     OneChan = Back(b,:);
-    Low = (OneChan > 4900 & OneChan < 5400);
-    High = (OneChan > 5400 & OneChan < 5700);
+    Low = (OneChan > 4900 & OneChan <= 5300);
+    High = (OneChan > 5300 & OneChan < 5700);
     if Low + High == OneMat
        buff = 1;
        break
     else
        if b == 4
-          %must be a second jump, need to send Back
+          %must be a another jump, need to send Back
           %matrix through algortithm and split and stitch it
 	  jumps = jumps + 1;
           [Back,jumps] = chswitch(Back,jumps);

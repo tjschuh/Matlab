@@ -26,8 +26,8 @@ while buffer == 0
 OneMat = ones(1,size(FourChan,2)); %builds an array of 1's with length=#ofCols of FourChan 
 for j = 1:4
     OneChan = FourChan(j,:);
-    Low = (OneChan > 4900 & OneChan < 5400);
-    High = (OneChan > 5400 & OneChan < 5700);
+    Low = (OneChan > 4900 & OneChan <= 5300);
+    High = (OneChan > 5300 & OneChan < 5700);
     if Low + High == OneMat
        buffer = 1;
        break
@@ -66,4 +66,3 @@ elseif j == 4
 else
       shift = FourChan;
 end
-	
