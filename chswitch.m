@@ -1,12 +1,11 @@
+function [FourChan,jumps] = chswitch(FourChan,jumps)
+
 % This is the channel switcher
 % If a file has a "jump" in it,
 % this script is called to find
 % the jump and correctly adjust
 % the channel order
-
-% Things to improve:
-% -Not a function, still just a script
-
+  
 OneChan = FourChan(1,:);
 D = diff(OneChan);
 thresh = 1500;
@@ -129,22 +128,27 @@ else
       FrontPrime = Front;
 end
 
+buff = 0;
+while buff == 0
 OneMat = ones(1,size(Back,2)); %builds an array of 1's with length=#ofCols of Back
 for b = 1:4
     OneChan = Back(b,:);
     Low = (OneChan > 4900 & OneChan < 5400);
     High = (OneChan > 5400 & OneChan < 5700);
     if Low + High == OneMat
+       buff = 1;
        break
     else
        if b == 4
           %must be a second jump, need to send Back
           %matrix through algortithm and split and stitch it
-          %run chdoubswitch.m
+	  jumps = jumps + 1;
+          [Back,jumps] = chswitch(Back,jumps);
        else
 
        end
     end
+end
 end
 
 % these if/else statements correctly organize the rows of the FourChan
@@ -171,8 +175,3 @@ else
 end
 
 FourChan = [FrontPrime BackPrime];
-
-clear Front
-clear Back
-clear FrontPrime
-clear BackPrime
