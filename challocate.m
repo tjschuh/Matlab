@@ -1,4 +1,20 @@
 function [shift,jumps] = challocate(FourChan)
+% [shift,jumps] = CHALLOCATE(FourChan)
+%
+% INPUT:
+%
+% FourChan     the 4-row matrix containing the raw, reshaped data from file
+%
+% OUTPUT:
+%
+% shift        4-row FourChan matrix that has rows correctly shifted around
+%              so the time channel is always in row 3
+% jumps        the number of times the data "jumped" and needed to be corrected
+%              a jump is where all the rows suddenly rearrange themselves
+%
+% TESTED ON: 9.8.0.1417392 (R2020a) Update 4
+%
+% Written by tschuh@princeton.edu, 09/04/2020
 
 % This is the channel allocator
 % It goes through each row of FourChan

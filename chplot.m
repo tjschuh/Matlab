@@ -1,9 +1,18 @@
-function chplot(numfiles)
+function chplot(firstfile,lastfile)
+% CHPLOT(firstfile,lastfile)
+%
+% INPUT:
+%
+% firstfile    the first file the function will be used on
+% lastfile      the last file the function will be used on
+%
+% OUTPUT:
+%
+% TESTED ON: 9.8.0.1417392 (R2020a) Update 4
+%
+% Written by tschuh@princeton.edu, 09/04/2020
 
-
-
-
-for file = 697:numfiles
+for file = firstfile:lastfile
 file
 % Open file, turn it into matrix, and then
 % reshape it into a 4 "channel" matrix
@@ -103,5 +112,3 @@ fclose(fid);
 clf
 
 end
-
-%totnumfiles = numfiles + 1; %accounts for file 0

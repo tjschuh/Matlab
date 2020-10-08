@@ -1,5 +1,22 @@
 function [FourChan,jumps] = chswitch(FourChan,jumps)
-
+% [FourChan,jumps] = CHSWITCH(FourChan,jumps)
+%
+% INPUT:
+%
+% FourChan      the 4-row matrix containing the raw, reshaped data from file
+% jumps         the number of times the data "jumped" and needed to be corrected  
+%               a jump is where all the rows suddenly rearrange themselves
+%
+% OUTPUT:
+%
+% FourChan      the same matrix as the input, but now it will no longer contain jumps
+% jumps         the number of times the data "jumped" and needed to be corrected                   
+%               a jump is where all the rows suddenly rearrange themselves
+%
+% TESTED ON: 9.8.0.1417392 (R2020a) Update 4
+%
+% Written by tschuh@princeton.edu, 09/04/2020
+  
 % This is the channel switcher
 % If a file has a "jump" in it,
 % this script is called to find
