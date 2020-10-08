@@ -1,25 +1,29 @@
+function [shift,jumps] = challocate(FourChan)
+
 % This is the channel allocator
 % It goes through each row of FourChan
 % and looks for the "Time" channel
 
-counter = 1;
-while counter < 2
+buffer = 0;
+jumps = 0;
+while buffer == 0
 OneMat = ones(1,size(FourChan,2)); %builds an array of 1's with length=#ofCols of FourChan 
 for j = 1:4
     OneChan = FourChan(j,:);
     Low = (OneChan > 4900 & OneChan < 5400);
     High = (OneChan > 5400 & OneChan < 5700);
     if Low + High == OneMat
-       counter = 2;
+       buffer = 1;
        break
     else
-      if j == 4
-         %means there was a channel jump and we need to run chswitch.m
-         run chswitch.m
-	 break
-      else
-	%j<4, so keep looking for time channel
-      end
+       if j == 4
+          %means there was a channel jump and we need to call chswitch
+          jumps = 1;
+          [FourChan,jumps] = chswitch(FourChan,jumps);
+	  break
+       else
+	  %j<4, so keep looking for time channel
+       end
     end	
 end
 end
