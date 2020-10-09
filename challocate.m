@@ -1,5 +1,5 @@
-function [shift,jumps] = challocate(FourChan)
-% [shift,jumps] = CHALLOCATE(FourChan)
+function [FourChanS,jumps] = challocate(FourChan)
+% [FourChanS,jumps] = CHALLOCATE(FourChan)
 %
 % INPUT:
 %
@@ -7,14 +7,14 @@ function [shift,jumps] = challocate(FourChan)
 %
 % OUTPUT:
 %
-% shift        4-row FourChan matrix that has rows correctly shifted around
+% FourChanS    4-row matrix that has rows correctly shifted around
 %              so the time channel is always in row 3
 % jumps        the number of times the data "jumped" and needed to be corrected
 %              a jump is where all the rows suddenly rearrange themselves
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 09/04/2020
+% Written by tschuh@princeton.edu, 10/09/2020
 
 % This is the channel allocator
 % It goes through each row of FourChan
@@ -45,24 +45,24 @@ end
 end
       
 % these if/else statements correctly organize the rows of the FourChan
-% matrix, creating the shift matrix in the process
+% matrix, creating the FourChanS matrix in the process
 if j == 1
-      shift(1,:) = FourChan(3,:);
-      shift(2,:) = FourChan(4,:);
-      shift(3,:) = FourChan(1,:);
-      shift(4,:) = FourChan(2,:);
+      FourChanS(1,:) = FourChan(3,:);
+      FourChanS(2,:) = FourChan(4,:);
+      FourChanS(3,:) = FourChan(1,:);
+      FourChanS(4,:) = FourChan(2,:);
 elseif j == 2
-      shift(1,:) = FourChan(4,:);
-      shift(2,:) = FourChan(1,:);
-      shift(3,:) = FourChan(2,:);
-      shift(4,:) = FourChan(3,:);
+      FourChanS(1,:) = FourChan(4,:);
+      FourChanS(2,:) = FourChan(1,:);
+      FourChanS(3,:) = FourChan(2,:);
+      FourChanS(4,:) = FourChan(3,:);
 elseif j == 3
-      shift = FourChan;
+      FourChanS = FourChan;
 elseif j == 4
-      shift(1,:) = FourChan(2,:);
-      shift(2,:) = FourChan(3,:);
-      shift(3,:) = FourChan(4,:);
-      shift(4,:) = FourChan(1,:);
+      FourChanS(1,:) = FourChan(2,:);
+      FourChanS(2,:) = FourChan(3,:);
+      FourChanS(3,:) = FourChan(4,:);
+      FourChanS(4,:) = FourChan(1,:);
 else
-      shift = FourChan;
+      FourChanS = FourChan;
 end
