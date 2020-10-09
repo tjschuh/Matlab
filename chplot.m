@@ -3,170 +3,140 @@ function chplot(firstfile,lastfile)
 %
 % INPUT:
 %
-% firstfile    the first file the function will be used on
-% lastfile      the last file the function will be used on
+% firstfile    the running number of the first file, e.g. 0, 1, 99, 362
+% lastfile     the running number of the last file 
 %
 % OUTPUT:
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 09/04/2020
+% Written by tschuh@princeton.edu, 10/09/2020
+
+% Assume the record length in seconds
+rlens=60;
+% Assume the sampling rate
+Fs=400000;
+% Moving average in seconds
+mas=1;
+
+% Moving average in left and right in samples
+maslr=[mas mas]/2*Fs;
 
 for file = firstfile:lastfile
-file
-% Open file, turn it into matrix, and then
-% reshape it into a 4 "channel" matrix
-str = sprintf('file%d.data',file);
-fid = fopen(str);
-raw = fread(fid,inf,'int16');
-FourChan = reshape(raw,4,[]);
+  disp('Working on file %3.3i / %3.3i',file,lastfile-firstfile)
+  % Open file, turn it into matrix, and then
+  % reshape it into a 4 "channel" matrix
+  fid = fopen(sprintf('file%d.data',file));
+  FourChan = reshape(fread(fid,inf,'int16'),4,[]);
+  fclose(fid);
+  % Allocate the channels and identify jumps
+  [FourChan,jumps] = challocate(FourChan);
 
-[shift,jumps] = challocate(FourChan);
+  %4000000 = 10 seconds
+  lowbound = randi(size(FourChan,2)-Fs-1);
+  upbound = lowbound + Fs-1;
+  sub = FourChan(:,lowbound:upbound);
+  onesec = 400000;
+  bot = onesec*ceil(lowbound/onesec);
+  top = onesec*floor(upbound/onesec);
+  tensec = [bot:onesec:top];
 
-%4000000 = 10 seconds
-lowbound = randi(size(shift,2)-3999999);
-upbound = lowbound + 3999999;
-sub = shift(:,lowbound:upbound);
+  % Plotting section
+  % adjust min/max thing! [left bottom width height]
+  set(0,'defaultfigureposition',[500 500 600 600])
+  % xtix={'0','5','10','15','20','25','30','35','40','45','50','55','60'};
+  xtixl1=0:5:60;
+  xtix1=xtxl1*Fs;
+  xtixl2={tensec./onesec};
+  %ylims=[1 2 ; 3 4 ; 5 6 ; 7 8];
+  titl={'Pre-Amped Acoustic Data','Bandpassed Acoustic Data','Time','Low-Frequency Hydrophone'};
 
-onesec = 400000;
-bot = onesec*ceil(lowbound/onesec);
-top = onesec*floor(upbound/onesec);
-tensec = [bot:onesec:top];
-
-% Plotting section
-% adjust min/max thing!
-set(0,'defaultfigureposition',[500 500 600 600]) % [left bottom width height]
-for i = 1:4
-    avg = mean(shift(i,:));
-    mavgshift = movmean(shift(4,:),[200000 200000]);
-    mavgsub = movmean(sub(4,:),[200000 200000]);
+  % Loop over the panels 
+  for i = 1:4
+    avg = mean(FourChan(i,:));
+    mavgFourChan = movmean(FourChan(4,:),maslr);
+    mavgsub = movmean(sub(4,:),maslr);
     if i == 1
       subplot(4,2,1);
-      plot(shift(1,:),'color',[0.4660 0.6740 0.1880])
+      plot(FourChan(1,:),'color',[0.4660 0.6740 0.1880])
       %yline(avg)
-      title('Pre-Amped Acoustic Data')
-      xlim([0 24000000])
-      xticks(0:2000000:24000000)
-      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
-      ylim([min(shift(1,:))-abs(.05*min(shift(1,:))) max(shift(1,:))+(.05*max(shift(1,:)))])
-      yticks([min(shift(1,:)) round(avg) max(shift(1,:))])
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xlim([0 rlens*Fs])
+      ylim([min(FourChan(1,:))-abs(.05*min(FourChan(1,:))) max(FourChan(1,:))+(.05*max(FourChan(1,:)))])
+      yticks([min(FourChan(1,:)) round(avg) max(FourChan(1,:))])
+      priti(gca,xtixl1,titl{1},xtix1)
       subplot(4,2,2);
       plot(sub(1,:),'color',[0.4660 0.6740 0.1880])
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
-      xticklabels({tensec./onesec})
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
+      priti(gca,xtixl2)
     elseif i == 2
       subplot(4,2,3);
-      plot(shift(2,:),'color',[0.6350 0.0780 0.1840])
+      plot(FourChan(2,:),'color',[0.6350 0.0780 0.1840])
       %yline(avg)
-      title('Bandpassed Acoustic Data')
-      xlim([0 24000000])
-      xticks(0:2000000:24000000)
-      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
-      ylim([min(shift(2,:))-abs(.01*min(shift(2,:))) max(shift(2,:))+(.01*max(shift(2,:)))])
-      yticks([min(shift(2,:)) round(avg) max(shift(2,:))])
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xlim([0 rlens*Fs])
+      ylim([min(FourChan(2,:))-abs(.01*min(FourChan(2,:))) max(FourChan(2,:))+(.01*max(FourChan(2,:)))])
+      yticks([min(FourChan(2,:)) round(avg) max(FourChan(2,:))])
+      priti(gca,xtixl1,titl{2},xtix1)
       subplot(4,2,4);
       plot(sub(2,:),'color',[0.6350 0.0780 0.1840])
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
-      xticklabels({tensec./onesec})
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
+      priti(gca,xtixl2)
     elseif i == 3
       subplot(4,2,5);
-      plot(shift(3,:),'k')
+      plot(FourChan(3,:),'k')
       %yline(avg)
-      title('Time')
-      xlim([0 24000000])
-      xticks(0:2000000:24000000)
-      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
+      xlim([0 rlens*Fs])
+      xticklabels(xtix)
       ylim([4900 5700])
       yticks([5000 5600])
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      priti(gca,xtixl1,titl{3},xtix1)
       subplot(4,2,6);
       plot(sub(3,:),'k')
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
-      xticklabels({tensec./onesec})
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
+      priti(gca,xtixl2)
     else
       subplot(4,2,7);
-      plot(shift(4,:),'color',[0 0.4470 0.7410])
+      plot(FourChan(4,:),'color',[0 0.4470 0.7410])
       hold on
-      plot(mavgshift)
+      plot(mavgFourChan)
       %yline(avg)
-      title('Low-Frequency Hydrophone')
-      xlim([0 24000000])
-      xticks(0:2000000:24000000)
-      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
-      xlabel('Time (seconds)')
-      ylim([min(shift(4,:))-abs(.01*min(shift(4,:))) max(shift(4,:))+(.01*max(shift(4,:)))])
-      yticks([min(shift(4,:)) round(avg) max(shift(4,:))])
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xlim([0 rlens*Fs])
+      xticklabels(xtix)
+      xlabel('Time [s]')
+      ylim([min(FourChan(4,:))-abs(.01*min(FourChan(4,:))) max(FourChan(4,:))+(.01*max(FourChan(4,:)))])
+      yticks([min(FourChan(4,:)) round(avg) max(FourChan(4,:))])
+      priti(gca,xtixl1,titl{4},xtix1)
       subplot(4,2,8);
       plot(sub(4,:),'color',[0 0.4470 0.7410])
       hold on
       plot(mavgsub)
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
-      xticklabels({tensec./onesec})
-      xlabel('Time (seconds)')
-      ax = gca;
-      ax.XGrid = 'on';
-      ax.YGrid = 'off';
-      ax.GridColor = [0 0 0];
-      ax.TickLength = [0 0];
+      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
+      xlabel('Time [s])')
+      priti(gca,xtixl2)
     end
-end
-sgtitle(['Minute ',num2str(file)])
-a = annotation('textbox',[0.77 0.94 0 0],'String',['# of jumps = ' num2str(jumps)],'FitBoxToText','on');
-a.FontSize = 12;
+  end
+  sgtitle(['Minute ',num2str(file)])
+  a = annotation('textbox',[0.77 0.94 0 0],'String',['# of jumps = ' num2str(jumps)],'FitBoxToText','on');
+  a.FontSize = 12;
+  
+  % Write the PDF image file
+  saveas(gcf,sprintf('file%3.3i.pdf',file));
 
-% this section adds leading zeros to the pdf names	 
-if numel(num2str(file)) == 1
-  filename = sprintf('file000%d.pdf',file);
-elseif numel(num2str(file)) == 2
-  filename = sprintf('file00%d.pdf',file);
-elseif numel(num2str(file)) == 3
-  filename = sprintf('file0%d.pdf',file);
-else
-  filename = sprintf('file%d.pdf',file);
-end
-
-saveas(gcf,filename);
-
-fclose(fid);
-
-%clf
+  %clf
 
 end
+
+% Cosmetics
+function priti(ax,xtil,tit,xtic)
+ax.XGrid = 'on';
+ax.YGrid = 'off';
+ax.GridColor = [0 0 0];
+ax.TickLength = [0 0];
+xticks(xtic)
+xticklabels(xtil)
+title(tit)
+
+
