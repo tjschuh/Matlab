@@ -23,18 +23,31 @@ FourChan = reshape(raw,4,[]);
 
 [shift,jumps] = challocate(FourChan);
 
+%4000000 = 10 seconds
+lowbound = randi(size(shift,2)-3999999);
+upbound = lowbound + 3999999;
+sub = shift(:,lowbound:upbound);
+
+onesec = 400000;
+bot = onesec*ceil(lowbound/onesec);
+top = onesec*floor(upbound/onesec);
+tensec = [bot:onesec:top];
+
 % Plotting section
 % adjust min/max thing!
+set(0,'defaultfigureposition',[500 500 600 600]) % [left bottom width height]
 for i = 1:4
-avg = mean(shift(i,:));
+    avg = mean(shift(i,:));
+    mavgshift = movmean(shift(4,:),[200000 200000]);
+    mavgsub = movmean(sub(4,:),[200000 200000]);
     if i == 1
-      subplot(4,1,1);
+      subplot(4,2,1);
       plot(shift(1,:),'color',[0.4660 0.6740 0.1880])
-      yline(avg)
+      %yline(avg)
       title('Pre-Amped Acoustic Data')
       xlim([0 24000000])
       xticks(0:2000000:24000000)
-      xticklabels({})
+      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
       ylim([min(shift(1,:))-abs(.05*min(shift(1,:))) max(shift(1,:))+(.05*max(shift(1,:)))])
       yticks([min(shift(1,:)) round(avg) max(shift(1,:))])
       ax = gca;
@@ -42,14 +55,24 @@ avg = mean(shift(i,:));
       ax.YGrid = 'off';
       ax.GridColor = [0 0 0];
       ax.TickLength = [0 0];
+      subplot(4,2,2);
+      plot(sub(1,:),'color',[0.4660 0.6740 0.1880])
+      xlim([0 4000000])
+      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
+      xticklabels({tensec./onesec})
+      ax = gca;
+      ax.XGrid = 'on';
+      ax.YGrid = 'off';
+      ax.GridColor = [0 0 0];
+      ax.TickLength = [0 0];
     elseif i == 2
-      subplot(4,1,2);
+      subplot(4,2,3);
       plot(shift(2,:),'color',[0.6350 0.0780 0.1840])
-      yline(avg)
+      %yline(avg)
       title('Bandpassed Acoustic Data')
       xlim([0 24000000])
       xticks(0:2000000:24000000)
-      xticklabels({})
+      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
       ylim([min(shift(2,:))-abs(.01*min(shift(2,:))) max(shift(2,:))+(.01*max(shift(2,:)))])
       yticks([min(shift(2,:)) round(avg) max(shift(2,:))])
       ax = gca;
@@ -57,14 +80,24 @@ avg = mean(shift(i,:));
       ax.YGrid = 'off';
       ax.GridColor = [0 0 0];
       ax.TickLength = [0 0];
+      subplot(4,2,4);
+      plot(sub(2,:),'color',[0.6350 0.0780 0.1840])
+      xlim([0 4000000])
+      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
+      xticklabels({tensec./onesec})
+      ax = gca;
+      ax.XGrid = 'on';
+      ax.YGrid = 'off';
+      ax.GridColor = [0 0 0];
+      ax.TickLength = [0 0];
     elseif i == 3
-      subplot(4,1,3);
+      subplot(4,2,5);
       plot(shift(3,:),'k')
       %yline(avg)
       title('Time')
       xlim([0 24000000])
       xticks(0:2000000:24000000)
-      xticklabels({})
+      xticklabels({'0','5','10','15','20','25','30','35','40','45','50','55','60'})
       ylim([4900 5700])
       yticks([5000 5600])
       ax = gca;
@@ -72,10 +105,22 @@ avg = mean(shift(i,:));
       ax.YGrid = 'off';
       ax.GridColor = [0 0 0];
       ax.TickLength = [0 0];
+      subplot(4,2,6);
+      plot(sub(3,:),'k')
+      xlim([0 4000000])
+      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
+      xticklabels({tensec./onesec})
+      ax = gca;
+      ax.XGrid = 'on';
+      ax.YGrid = 'off';
+      ax.GridColor = [0 0 0];
+      ax.TickLength = [0 0];
     else
-      subplot(4,1,4);
+      subplot(4,2,7);
       plot(shift(4,:),'color',[0 0.4470 0.7410])
-      yline(avg)
+      hold on
+      plot(mavgshift)
+      %yline(avg)
       title('Low-Frequency Hydrophone')
       xlim([0 24000000])
       xticks(0:2000000:24000000)
@@ -88,9 +133,22 @@ avg = mean(shift(i,:));
       ax.YGrid = 'off';
       ax.GridColor = [0 0 0];
       ax.TickLength = [0 0];
+      subplot(4,2,8);
+      plot(sub(4,:),'color',[0 0.4470 0.7410])
+      hold on
+      plot(mavgsub)
+      xlim([0 4000000])
+      xticks([(bot-lowbound):onesec:(3999999-(upbound-top))])
+      xticklabels({tensec./onesec})
+      xlabel('Time (seconds)')
+      ax = gca;
+      ax.XGrid = 'on';
+      ax.YGrid = 'off';
+      ax.GridColor = [0 0 0];
+      ax.TickLength = [0 0];
     end
 end
-sgtitle(['File ',num2str(file)])
+sgtitle(['Minute ',num2str(file)])
 a = annotation('textbox',[0.77 0.94 0 0],'String',['# of jumps = ' num2str(jumps)],'FitBoxToText','on');
 a.FontSize = 12;
 
@@ -109,6 +167,6 @@ saveas(gcf,filename);
 
 fclose(fid);
 
-clf
+%clf
 
 end
