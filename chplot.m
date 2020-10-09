@@ -23,7 +23,7 @@ mas=1;
 maslr=[mas mas]/2*Fs;
 
 for file = firstfile:lastfile
-  disp('Working on file %3.3i / %3.3i',file,lastfile-firstfile)
+  disp(sprintf('Working on file %3.3i / %3.3i',file,lastfile-firstfile+1))
   % Open file, turn it into matrix, and then
   % reshape it into a 4 "channel" matrix
   fid = fopen(sprintf('file%d.data',file));
@@ -46,7 +46,7 @@ for file = firstfile:lastfile
   set(0,'defaultfigureposition',[500 500 600 600])
   % xtix={'0','5','10','15','20','25','30','35','40','45','50','55','60'};
   xtixl1=0:5:60;
-  xtix1=xtxl1*Fs;
+  xtix1=xtixl1*Fs;
   xtixl2={tensec./onesec};
   %ylims=[1 2 ; 3 4 ; 5 6 ; 7 8];
   titl={'Pre-Amped Acoustic Data','Bandpassed Acoustic Data','Time','Low-Frequency Hydrophone'};
@@ -67,8 +67,7 @@ for file = firstfile:lastfile
       subplot(4,2,2);
       plot(sub(1,:),'color',[0.4660 0.6740 0.1880])
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
-      priti(gca,xtixl2)
+      priti(gca,xtixl2,[],(bot-lowbound):onesec:(Fs-1-(upbound-top)))
     elseif i == 2
       subplot(4,2,3);
       plot(FourChan(2,:),'color',[0.6350 0.0780 0.1840])
@@ -80,22 +79,19 @@ for file = firstfile:lastfile
       subplot(4,2,4);
       plot(sub(2,:),'color',[0.6350 0.0780 0.1840])
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
-      priti(gca,xtixl2)
+      priti(gca,xtixl2,[],(bot-lowbound):onesec:(Fs-1-(upbound-top)))
     elseif i == 3
       subplot(4,2,5);
       plot(FourChan(3,:),'k')
       %yline(avg)
       xlim([0 rlens*Fs])
-      xticklabels(xtix)
       ylim([4900 5700])
       yticks([5000 5600])
       priti(gca,xtixl1,titl{3},xtix1)
       subplot(4,2,6);
       plot(sub(3,:),'k')
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
-      priti(gca,xtixl2)
+      priti(gca,xtixl2,[],(bot-lowbound):onesec:(Fs-1-(upbound-top)))
     else
       subplot(4,2,7);
       plot(FourChan(4,:),'color',[0 0.4470 0.7410])
@@ -103,7 +99,6 @@ for file = firstfile:lastfile
       plot(mavgFourChan)
       %yline(avg)
       xlim([0 rlens*Fs])
-      xticklabels(xtix)
       xlabel('Time [s]')
       ylim([min(FourChan(4,:))-abs(.01*min(FourChan(4,:))) max(FourChan(4,:))+(.01*max(FourChan(4,:)))])
       yticks([min(FourChan(4,:)) round(avg) max(FourChan(4,:))])
@@ -113,9 +108,8 @@ for file = firstfile:lastfile
       hold on
       plot(mavgsub)
       xlim([0 4000000])
-      xticks([(bot-lowbound):onesec:(Fs-1-(upbound-top))])
       xlabel('Time [s])')
-      priti(gca,xtixl2)
+      priti(gca,xtixl2,[],(bot-lowbound):onesec:(Fs-1-(upbound-top)))
     end
   end
   sgtitle(['Minute ',num2str(file)])
