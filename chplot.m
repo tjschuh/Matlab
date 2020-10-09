@@ -28,12 +28,25 @@ for file = firstfile:lastfile
   disp(sprintf('Working on file %3.3i / %3.3i',file,lastfile-firstfile+1))
   % Open file, turn it into matrix, and then
   % reshape it into a 4 "channel" matrix
-  fid = fopen(sprintf('file%d.data',file));
-  FourChan = reshape(fread(fid,inf,'int16'),4,[]);
-  fclose(fid);
-  % Allocate the channels and identify jumps
-  [FourChan,jumps] = challocate(FourChan);
+  % Here is the filename
+  fname=sprintf('file%d.data',file);
+  sname=sprintf('file%d.mat',file);
 
+  if exist(sname)~=2
+    % Read the data
+    fid = fopen(fname);
+    FourChan = reshape(fread(fid,inf,'int16'),4,[]);
+    fclose(fid);
+    
+    % Allocate the channels and identify jumps
+    [FourChan,jumps] = challocate(FourChan);
+
+    % Save it so next time you neither have to read it nor allocate it
+    save(sname,FourChan,jumps)
+  else
+    load(sname)
+  end
+      
   % Define a random segment of a certain length
   lowbound = randi(size(FourChan,2)-rseg*Fs-1);
   upbound = lowbound + rseg*Fs-1;
