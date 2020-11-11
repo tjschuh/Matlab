@@ -53,6 +53,11 @@ for file = firstfile:lastfile
     %fclose(fid)
   %end
 
+  % run cross-correlation function
+  if file == 1300 %this will eventually be a function input value 
+     chcross(FourChan);
+  end
+
   % Define a random segment of a certain length
   lowbound = randi(size(FourChan,2)-rseg*Fs-1);
   upbound = lowbound + rseg*Fs-1;
@@ -72,7 +77,8 @@ for file = firstfile:lastfile
   xlimit2 = [0 rseg*Fs];
   titl = {'Pre-Amped Acoustic Data','Bandpassed Acoustic Data','Time','Low-Frequency Hydrophone'};
   
-  % Loop over the panels 
+  % Loop over the panels
+  figure
   for i = 1:4
     avg = mean(FourChan(i,:));
     mavgFourChan = movmean(FourChan(4,:),maslr);
