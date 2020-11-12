@@ -55,7 +55,7 @@ for file = firstfile:lastfile
 
   % run cross-correlation function
   if file == 1300 %this will eventually be a function input value 
-     chcross(FourChan);
+     chcross(FourChan,rlens);
   end
 
   % Define a random segment of a certain length
