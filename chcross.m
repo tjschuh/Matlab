@@ -1,4 +1,4 @@
-function [tsample1,cross] = chcross(FourChan,rlens)
+function [tsample,cross] = chcross(FourChan,rlens)
 % CHPLOT(FourChan)
 %
 % INPUT:
@@ -32,25 +32,41 @@ function [tsample1,cross] = chcross(FourChan,rlens)
 %plot(cross)
 
 %first one-second time snippet from FourChan  
-tsample1 = FourChan(3,1:400000);
+
 
 %loop that computes subsequent one-second time snippets
 %from FourChan and then cross-correlates them with tsample1
-figure
-title('Cross-Correlation')
-for i = 1:rlens
-    tsample2 = FourChan(3,1+400000*(i-1):400000*i);
-    [c,lags] = xcorr(tsample1,tsample2);
-    stem(lags(1:10000:end),c(1:10000:end))
-    if i == rlens
-      hold off
-    else
-      hold on
-    end
-end
+%figure
+%title('Cross-Correlation')
+%for i = 1:rlens
+    %tsample2 = FourChan(3,1+400000*(i-1):400000*i);
+    %[c,lags] = xcorr(tsample1,tsample2);
+    %stem(lags(1:10000:end),c(1:10000:end))
+    %if i == rlens
+     % hold off
+    %else
+     % hold on
+    %end
+%end
 
 %this is just "playing"
 figure
-tsample = FourChan(3,1:800000);
-[c,lags] = xcorr(tsample,circshift(tsample,400000));
-stem(lags,c)
+N = 10000;
+M = 800000;
+FourChan = FourChan(:,1:M);
+FourChan(3,:) = FourChan(3,:) - min(FourChan(3,:));
+tsample1 = FourChan(3,1:400000);
+tsample2 = FourChan(3,400001:M);
+tsample  = FourChan(3,1:M);
+[c,lags] = xcorr(tsample1,tsample);
+
+subplot(3,1,1)
+plot(tsample1)
+xlim([0 M])
+subplot(3,1,2)
+plot(tsample)
+xlim([0 M])
+subplot(3,1,3)
+plot(lags,c)
+
+keyboard
