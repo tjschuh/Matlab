@@ -50,23 +50,42 @@ function [tsample,cross] = chcross(FourChan,rlens)
 %end
 
 %this is just "playing"
-figure
-N = 10000;
-M = 800000;
-FourChan = FourChan(:,1:M);
+%figure
+%N = 10000;
+%M = 800000;
+%FourChan = FourChan(:,1:M);
 FourChan(3,:) = FourChan(3,:) - min(FourChan(3,:));
-tsample1 = FourChan(3,1:400000);
-tsample2 = FourChan(3,400001:M);
-tsample  = FourChan(3,1:M);
-[c,lags] = xcorr(tsample1,tsample);
+%tsample1 = FourChan(3,1:400000);
+%tsample2 = FourChan(3,400001:M);
+%tsample  = FourChan(3,1:M);
+%[c,lags] = xcorr(tsample1,tsample);
 
-subplot(3,1,1)
-plot(tsample1)
-xlim([0 M])
-subplot(3,1,2)
-plot(tsample)
-xlim([0 M])
-subplot(3,1,3)
-plot(lags,c)
+%subplot(3,1,1)
+%plot(tsample1)
+%xlim([0 M])
+%subplot(3,1,2)
+%plot(tsample)
+%xlim([0 M])
+%subplot(3,1,3)
+%plot(lags,c)
+
+%keyboard
+%[c,lags] = xcorr(tsample1,tsample1);
+
+%figure
+%plot(lags(1:10000:end),c(1:10000:end))
+%hold on
+
+%[c,lags] = xcorr(tsample1,tsample2);
+%plot(lags(1:10000:end),c(1:10000:end))
+%legend('1-1','1-2')
+
+for i = 1:rlens
+  tsample1 = FourChan(3,1:400000);
+  tsample2 = FourChan(3,1+400000*(i-1):400000*i);
+  [c,lags] = xcorr(tsample1,tsample2);
+  plot(lags(1:10000:end),c(1:10000:end))
+  hold on
+end
 
 keyboard
