@@ -78,7 +78,6 @@ for file = firstfile:lastfile
   titl = {'Pre-Amped Acoustic Data','Bandpassed Acoustic Data','Time','Low-Frequency Hydrophone'};
   
   % Loop over the panels
-  figure
   for i = 1:4
     avg = mean(FourChan(i,:));
     mavgFourChan = movmean(FourChan(4,:),maslr);
