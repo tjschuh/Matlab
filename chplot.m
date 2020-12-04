@@ -1,4 +1,4 @@
-function chplot(firstfile,lastfile,rseg)
+function [mc,mcloc] = chplot(firstfile,lastfile,rseg,xver)
 % CHPLOT(firstfile,lastfile)
 %
 % INPUT:
@@ -9,6 +9,8 @@ function chplot(firstfile,lastfile,rseg)
 %
 % OUTPUT:
 %
+% 
+%  
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Written by tschuh@princeton.edu, 10/09/2020
@@ -53,9 +55,9 @@ for file = firstfile:lastfile
   end
   
   % run cross-correlation function
-  if file == 1715 %this will eventually be a function input value 
-     chcross(FourChan,rlens);
-  end
+  %if file == 1715 %this will eventually be a function input value 
+     [~,~,mc,mcloc] = chcross(FourChan,rlens,xver);
+  %end
 
   % Define a random segment of a certain length
   lowbound = randi(size(FourChan,2)-rseg*Fs-1);
