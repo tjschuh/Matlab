@@ -49,43 +49,29 @@ function [tsample,cross] = chcross(FourChan,rlens)
     %end
 %end
 
-%this is just "playing"
-%figure
-%N = 10000;
-%M = 800000;
-%FourChan = FourChan(:,1:M);
+%working code
 FourChan(3,:) = FourChan(3,:) - min(FourChan(3,:));
-%tsample1 = FourChan(3,1:400000);
-%tsample2 = FourChan(3,400001:M);
-%tsample  = FourChan(3,1:M);
-%[c,lags] = xcorr(tsample1,tsample);
-
-%subplot(3,1,1)
-%plot(tsample1)
-%xlim([0 M])
-%subplot(3,1,2)
-%plot(tsample)
-%xlim([0 M])
-%subplot(3,1,3)
-%plot(lags,c)
-
-%keyboard
-%[c,lags] = xcorr(tsample1,tsample1);
-
-%figure
-%plot(lags(1:10000:end),c(1:10000:end))
-%hold on
-
-%[c,lags] = xcorr(tsample1,tsample2);
-%plot(lags(1:10000:end),c(1:10000:end))
-%legend('1-1','1-2')
+sampsize = 400000;
+int = 10000;
 
 for i = 1:rlens
-  tsample1 = FourChan(3,1:400000);
-  tsample2 = FourChan(3,1+400000*(i-1):400000*i);
+  tsample1 = FourChan(3,1:sampsize);
+  tsample2 = FourChan(3,1+sampsize*(i-1):sampsize*i);
   [c,lags] = xcorr(tsample1,tsample2);
-  plot(lags(1:10000:end),c(1:10000:end))
+  subplot(1,2,1)
+  plot(lags(1:int:end),c(1:int:end))
   hold on
 end
 
-keyboard
+for i = 1:rlens
+  tsample1 = FourChan(3,1:sampsize);
+  tsample2 = FourChan(3,1+sampsize*(i-1):sampsize*i);
+  [c,lags] = xcorr(tsample1,tsample2);
+  dummy(i,:) = c;
+  subplot(1,2,2)
+  plot(lags(1:int:end),c(1:int:end))
+  if i == rlens
+    ylim([min(dummy(:,400000))-0.001*min(dummy(:,400000))  max(dummy,[],'all')+0.001*max(dummy,[],'all')])
+  end
+  hold on
+end
