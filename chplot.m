@@ -25,7 +25,7 @@ mas = 1;
 maslr = ([mas mas]/2)*Fs;
 
 for file = firstfile:lastfile
-  disp(sprintf('Working on file %3.3i (%3.3i of %3.3i)',file,file-firstfile+1,lastfile-firstfile+1))
+  disp(sprintf('Working on file %3.4i (%3.4i of %3.4i)',file,file-firstfile+1,lastfile-firstfile+1))
   % Open file, turn it into matrix, and then
   % reshape it into a 4 "channel" matrix
   % Here is the filename
@@ -141,7 +141,7 @@ for file = firstfile:lastfile
   end
   
   % Write the PDF image file
-  saveas(gcf,sprintf('file%3.3i.pdf',file));
+  saveas(gcf,sprintf('file%3.4i.pdf',file));
 
   if firstfile == lastfile || file == lastfile
     %if working with 1 file, or working on the last file of a set, don't clf
