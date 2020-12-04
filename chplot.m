@@ -30,8 +30,8 @@ for file = firstfile:lastfile
   % reshape it into a 4 "channel" matrix
   % Here is the filename
   fname = sprintf('file%d.data',file);
-  %sname=sprintf('file%d.datb',file);
-  %if exist(sname)~=2
+  sname=sprintf('file%d.datb',file);
+  if exist(sname) ~= 2
     % Read the data
     fid = fopen(fname);
     FourChan = reshape(fread(fid,inf,'int16'),4,[]);
@@ -41,20 +41,19 @@ for file = firstfile:lastfile
     [FourChan,jumps] = challocate(FourChan);
 
     % Save it so next time you neither have to read it nor allocate it
-    %save(sname,'FourChan','jumps')
-    %fid = fopen(sname,'w');
-    %fwrite(fid,FourChan,'int16');
-    %fclose(fid);
-  %else
-    %disp(sprintf('loading file %s',sname))
-    %load(sname)
-    %fid = fopen(sname);
-    %FourChan = reshape(fread(fid,inf,'int16'),4,[]);
-    %fclose(fid)
-  %end
-
+    save(sname,'FourChan','jumps')
+    fid = fopen(sname,'w');
+    fwrite(fid,FourChan,'int16');
+    fclose(fid);
+  else
+    disp(sprintf('loading file %s',sname))
+    fid = fopen(sname);
+    FourChan = reshape(fread(fid,inf,'int16'),4,[]);
+    fclose(fid);
+  end
+  
   % run cross-correlation function
-  if file == 1300 %this will eventually be a function input value 
+  if file == 1715 %this will eventually be a function input value 
      chcross(FourChan,rlens);
   end
 
@@ -78,6 +77,7 @@ for file = firstfile:lastfile
   titl = {'Pre-Amped Acoustic Data','Bandpassed Acoustic Data','Time','Low-Frequency Hydrophone'};
   
   % Loop over the panels
+  figure %this is needed to not overwrite cross-correlation figure
   for i = 1:4
     avg = mean(FourChan(i,:));
     mavgFourChan = movmean(FourChan(4,:),maslr);
@@ -133,8 +133,12 @@ for file = firstfile:lastfile
     end
   end
   sgtitle(['Minute ',num2str(file)])
-  a = annotation('textbox',[0.77 0.94 0 0],'String',['# of jumps = ' num2str(jumps)],'FitBoxToText','on');
-  a.FontSize = 12;
+  if exist('jumps','var') ~= 0
+    a = annotation('textbox',[0.77 0.94 0 0],'String',['# of jumps = ' num2str(jumps)],'FitBoxToText','on');
+    a.FontSize = 12;
+  else
+    %jumps doesnt exist as a variable, so just ignore it
+  end
   
   % Write the PDF image file
   saveas(gcf,sprintf('file%3.3i.pdf',file));
