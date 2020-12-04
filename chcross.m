@@ -1,4 +1,4 @@
-function [tsample,cross] = chcross(FourChan,rlens)
+function [tsample1,cross,mc,mcloc] = chcross(FourChan,rlens,xver)
 % CHPLOT(FourChan)
 %
 % INPUT:
@@ -24,7 +24,7 @@ function [tsample,cross] = chcross(FourChan,rlens)
 %autocross = xcorr(tsample1)/max(xcorr(tsample1)); 
 
 %cross = xcorr(tsample1,tsample2)/max(xcorr(tsample1,tsample2));
-
+  cross = NaN;
 %figure
 %plot(autocross)
 %title('Cross-Correlation')
@@ -50,28 +50,47 @@ function [tsample,cross] = chcross(FourChan,rlens)
 %end
 
 %working code
+  
 FourChan(3,:) = FourChan(3,:) - min(FourChan(3,:));
+%length of 1 second segment
 sampsize = 400000;
-int = 10000;
+%subsample
+intv = 10000;
 
 for i = 1:rlens
+  %template segment
   tsample1 = FourChan(3,1:sampsize);
+  %same size segment, incrementally offset by sampsize
   tsample2 = FourChan(3,1+sampsize*(i-1):sampsize*i);
-  [c,lags] = xcorr(tsample1,tsample2);
+  %cross-correlation
+  [c,lags] = xcorr(tsample1,tsample2,'coeff');
+  if xver == 1
   subplot(1,2,1)
-  plot(lags(1:int:end),c(1:int:end))
+  %plot subsample version
+  plot(lags(1:intv:end),c(1:intv:end))
   hold on
+  end
 end
 
 for i = 1:rlens
   tsample1 = FourChan(3,1:sampsize);
   tsample2 = FourChan(3,1+sampsize*(i-1):sampsize*i);
-  [c,lags] = xcorr(tsample1,tsample2);
+  [c,lags] = xcorr(tsample1,tsample2,'coeff');
   dummy(i,:) = c;
-  subplot(1,2,2)
-  plot(lags(1:int:end),c(1:int:end))
-  if i == rlens
-    ylim([min(dummy(:,400000))-0.001*min(dummy(:,400000))  max(dummy,[],'all')+0.001*max(dummy,[],'all')])
+  [mc(i),mcloc(i)] = max(c);
+  if xver == 1
+    subplot(1,2,2)
+    plot(lags(1:intv:end),c(1:intv:end))
+    if i == rlens
+      ylim([min(dummy(:,sampsize))-0.001*min(dummy(:,sampsize)) ...
+					    max(dummy,[],'all')+0.001*max(dummy,[],'all')])
+    end
+    hold on
+    title(sprintf('%6.4f at %4i',mc(i),mcloc(i)-sampsize*i,'FontSize',20)
+    ylim([0.95 1.005])
+    pause
   end
-  hold on
+  mcloc(i) = mcloc(i) - sampsize*i;  
 end
+
+%keyboard
