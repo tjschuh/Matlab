@@ -1,24 +1,28 @@
-function [mc,mcloc] = chplot(firstfile,lastfile,rseg,xver)
+function [mc,mcloc] = chplot(firstfile,lastfile,rseg,plotver,xver)
 % CHPLOT(firstfile,lastfile)
 %
 % INPUT:
 %
 % firstfile    the running number of the first file, e.g. 0, 1, 99, 362
 % lastfile     the running number of the last file
-% rseg         size of segment length, default value is 10 seconds
+% rseg         size of segment length (default value is 5 seconds)
+% plotver      switch (1 or 0) to on/off plotting feature (default is on)
+% xver         switch (1 or 0) to turn on/off cross-correlation feature (default is on)
 %
 % OUTPUT:
-%
-% 
 %  
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Written by tschuh@princeton.edu, 10/09/2020
 
+% By default, plotting feature is turned on
+defval('plotver',1);
+% By default, cross-correlation feature is turned on
+defval('xver',1);
 % Assume the record length in seconds
 rlens = 60;
 % Define a random segment length for inspection in seconds
-defval('rseg',10);
+defval('rseg',5);
 % Assume the sampling rate
 Fs = 400000;
 % Moving average in seconds
@@ -54,11 +58,13 @@ for file = firstfile:lastfile
     fclose(fid);
   end
   
-  % run cross-correlation function
-  %if file == 1715 %this will eventually be a function input value 
+  % Call cross-correlation function if xver is "on"
+  %if xver == 1
      [~,~,mc,mcloc] = chcross(FourChan,rlens,xver);
   %end
 
+  % Plotting section, called only if plotver is "on"
+  if plotver == 1
   % Define a random segment of a certain length
   lowbound = randi(size(FourChan,2)-rseg*Fs-1);
   upbound = lowbound + rseg*Fs-1;
@@ -67,9 +73,8 @@ for file = firstfile:lastfile
   top = Fs*floor(upbound/Fs);
   tensec = [bot:Fs:top];
 
-  % Plotting section
-  % adjust min/max thing! [left bottom width height]
-  set(0,'defaultfigureposition',[500 500 600 600])
+  % Define plotting variables that are neccessary for "cosmo" function below
+  set(0,'defaultfigureposition',[500 500 600 600]) %[left bottom width height]
   xtixl1 = 0:5:60;
   xtix1 = xtixl1*Fs;
   xlimit1 = [0 rlens*Fs];
@@ -149,6 +154,7 @@ for file = firstfile:lastfile
     %if working with 1 file, or working on the last file of a set, don't clf
   else
     clf
+  end
   end
 
 end
