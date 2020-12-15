@@ -25,6 +25,12 @@ defval('xymin',-100);
 %max x/y-value for shiplocations rng
 defval('xymax',100);
 
+%min z-value for shiplocations rng
+zmin = 975;
+
+%max z-value for shiplocations rng
+zmax = 1025;
+
 %number of data points
 defval('npoints',100);
 
@@ -45,7 +51,7 @@ phi = linspace(0, nturns*2*pi, npoints);
 r = linspace(0, R, numel(phi));
 shiplocations(:,1) = pos(1,1) + r .* cos(phi + phi0); %shiplocations x-coordinate
 shiplocations(:,2) = pos(1,2) + r  .* sin(phi + phi0); %shiplocations y-coordinate
-shiplocations(:,3) = 950 + (1050-950)*rand(1,100); %shiplocations z-coordinate between (900,1100)
+shiplocations(:,3) = zmin + (zmax-zmin)*rand(1,100); %shiplocations z-coordinate between (zmin,zmax)
 end
 
 %plot ship path and beacon location
