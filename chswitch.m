@@ -18,10 +18,13 @@ function [FourChan,jumps] = chswitch(FourChan,jumps)
 % Written by tschuh@princeton.edu, 09/04/2020
   
 % This is the channel switcher
-% If a file has a "jump" in it,
-% this script is called to find
-% the jump and correctly adjust
-% the channel order
+% If a file has a "jump" in it, this script is called to find
+% the jump and correctly adjust the channel order
+
+% This code finds the column(s) where jump(s) occur, splits the
+% FourChan master matrix into 2 matrices at those point(s),
+% shifts the rows of the backend matrix appropriately, and
+% then stitches the two matrices back together again 
   
 OneChan = FourChan(1,:);
 D = diff(OneChan);
