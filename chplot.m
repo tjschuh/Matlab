@@ -1,4 +1,4 @@
-function [mc,mcloc] = chplot(firstfile,lastfile,rseg,plotver,xver)
+function chplot(firstfile,lastfile,rseg,plotver,xver)%,blah)
 % CHPLOT(firstfile,lastfile)
 %
 % INPUT:
@@ -7,7 +7,7 @@ function [mc,mcloc] = chplot(firstfile,lastfile,rseg,plotver,xver)
 % lastfile     the running number of the last file
 % rseg         size of segment length (default value is 5 seconds)
 % plotver      switch (1 or 0) to on/off plotting feature (default is on)
-% xver         switch (1 or 0) to turn on/off cross-correlation feature (default is on)
+% xver         switch (1 or 0) to turn on/off cross-correlation feature (default is off)
 %
 % OUTPUT:
 %  
@@ -17,8 +17,8 @@ function [mc,mcloc] = chplot(firstfile,lastfile,rseg,plotver,xver)
 
 % By default, plotting feature is turned on
 defval('plotver',1);
-% By default, cross-correlation feature is turned on
-defval('xver',1);
+% By default, cross-correlation feature is turned off
+defval('xver',0);
 % Assume the record length in seconds
 rlens = 60;
 % Define a random segment length for inspection in seconds
@@ -27,7 +27,7 @@ defval('rseg',5);
 Fs = 400000;
 % Moving average in seconds
 mas = 1;
-% Moving average in left and right in samples
+% Moving average left and right in units of samples
 maslr = ([mas mas]/2)*Fs;
 
 for file = firstfile:lastfile
@@ -59,9 +59,9 @@ for file = firstfile:lastfile
   end
   
   % Call cross-correlation function if xver is "on"
-  %if xver == 1
+  if xver == 1
      [~,~,mc,mcloc] = chcross(FourChan,rlens,xver);
-  %end
+  end
 
   % Plotting section, called only if plotver is "on"
   if plotver == 1
@@ -81,7 +81,10 @@ for file = firstfile:lastfile
   xtixl2 = tensec/Fs;
   xtix2 = (bot-lowbound):Fs:((10*Fs)-1-(upbound-top));
   xlimit2 = [0 rseg*Fs];
-  titl = {'Pre-Amped Acoustic Data','Bandpassed Acoustic Data','Time','Low-Frequency Hydrophone'};
+  titl = {'PPS & Timestamp', ...
+          'Pre-Amped 400 kHz Acoustic Data', ...
+          '12.5 kHz Bandpassed Acoustic Data', ...
+	  'Low-Frequency Hydrophone'};
   
   % Loop over the panels
   figure %this is needed to not overwrite cross-correlation figure
@@ -90,36 +93,38 @@ for file = firstfile:lastfile
     mavgFourChan = movmean(FourChan(4,:),maslr);
     mavgsub = movmean(sub(4,:),maslr);
     if i == 1
+      %ah(i) = subplot(4,2,1);
       subplot(4,2,1);
-      plot(FourChan(1,:),'color',[0.4660 0.6740 0.1880])
+      plot(FourChan(1,:),'k')
       %yline(avg)
-      ylim([min(FourChan(1,:))-abs(.05*min(FourChan(1,:))) max(FourChan(1,:))+(.05*max(FourChan(1,:)))])
-      yticks([min(FourChan(1,:)) round(avg) max(FourChan(1,:))])
+      ylim([4900 5700])
+      yticks([5000 5600])
       cosmo(gca,titl{1},xlimit1,xtix1,xtixl1)
       subplot(4,2,2)
-      plot(sub(1,:),'color',[0.4660 0.6740 0.1880])
+      plot(sub(1,:),'k')
+      ylim([4900 5700])
+      yticks([5000 5600])
       cosmo(gca,[],xlimit2,xtix2,xtixl2)
     elseif i == 2
+      %ah(i) = subplot(4,2,3);
       subplot(4,2,3);
-      plot(FourChan(2,:),'color',[0.6350 0.0780 0.1840])
+      plot(FourChan(2,:),'color',[0.4660 0.6740 0.1880])
       %yline(avg)
-      ylim([min(FourChan(2,:))-abs(.01*min(FourChan(2,:))) max(FourChan(2,:))+(.01*max(FourChan(2,:)))])
+      ylim([min(FourChan(2,:))-abs(.05*min(FourChan(2,:))) max(FourChan(2,:))+(.05*max(FourChan(2,:)))])
       yticks([min(FourChan(2,:)) round(avg) max(FourChan(2,:))])
       cosmo(gca,titl{2},xlimit1,xtix1,xtixl1)
       subplot(4,2,4)
-      plot(sub(2,:),'color',[0.6350 0.0780 0.1840])
+      plot(sub(2,:),'color',[0.4660 0.6740 0.1880])
       cosmo(gca,[],xlimit2,xtix2,xtixl2)
     elseif i == 3
       subplot(4,2,5);
-      plot(FourChan(3,:),'k')
+      plot(FourChan(3,:),'color',[0.6350 0.0780 0.1840])
       %yline(avg)
-      ylim([4900 5700])
-      yticks([5000 5600])
+      ylim([min(FourChan(3,:))-abs(.01*min(FourChan(3,:))) max(FourChan(3,:))+(.01*max(FourChan(3,:)))])
+      yticks([min(FourChan(3,:)) round(avg) max(FourChan(3,:))])
       cosmo(gca,titl{3},xlimit1,xtix1,xtixl1)
       subplot(4,2,6);
-      plot(sub(3,:),'k')
-      ylim([4900 5700])
-      yticks([5000 5600])
+      plot(sub(3,:),'color',[0.6350 0.0780 0.1840]) 
       cosmo(gca,[],xlimit2,xtix2,xtixl2)
     else
       subplot(4,2,7);
@@ -139,7 +144,7 @@ for file = firstfile:lastfile
       cosmo(gca,[],xlimit2,xtix2,xtixl2)
     end
   end
-  sgtitle(['Minute ',num2str(file)])
+  sgtitle(['BIOSUnit2, Minute ',num2str(file)])
   if exist('jumps','var') ~= 0
     a = annotation('textbox',[0.77 0.94 0 0],'String',['# of jumps = ' num2str(jumps)],'FitBoxToText','on');
     a.FontSize = 12;
