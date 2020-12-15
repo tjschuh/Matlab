@@ -51,7 +51,7 @@ for i = 1:rlens
 		max(cross,[],'all')+0.001*max(cross,[],'all')])
     end
     hold on
-    %pause
+    pause
   end
 end
 
