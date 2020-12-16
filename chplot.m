@@ -99,12 +99,12 @@ for file = firstfile:lastfile
       %yline(avg)
       ylim([4900 5700])
       yticks([5000 5600])
-      cosmo(gca,titl{1},xlimit1,xtix1,xtixl1)
+      cosmo(gca,titl{1},xlimit1,xtix1,[])
       subplot(4,2,2)
       plot(sub(1,:),'k')
       ylim([4900 5700])
       yticks([5000 5600])
-      cosmo(gca,[],xlimit2,xtix2,xtixl2)
+      cosmo(gca,[],xlimit2,xtix2,[])
     elseif i == 2
       %ah(i) = subplot(4,2,3);
       subplot(4,2,3);
@@ -112,25 +112,25 @@ for file = firstfile:lastfile
       %yline(avg)
       ylim([min(FourChan(2,:))-abs(.05*min(FourChan(2,:))) max(FourChan(2,:))+(.05*max(FourChan(2,:)))])
       yticks([min(FourChan(2,:)) round(avg) max(FourChan(2,:))])
-      cosmo(gca,titl{2},xlimit1,xtix1,xtixl1)
+      cosmo(gca,titl{2},xlimit1,xtix1,[])
       subplot(4,2,4)
       plot(sub(2,:),'color',[0.4660 0.6740 0.1880])
-      cosmo(gca,[],xlimit2,xtix2,xtixl2)
+      cosmo(gca,[],xlimit2,xtix2,[])
     elseif i == 3
       subplot(4,2,5);
       plot(FourChan(3,:),'color',[0.6350 0.0780 0.1840])
       %yline(avg)
       ylim([min(FourChan(3,:))-abs(.01*min(FourChan(3,:))) max(FourChan(3,:))+(.01*max(FourChan(3,:)))])
       yticks([min(FourChan(3,:)) round(avg) max(FourChan(3,:))])
-      cosmo(gca,titl{3},xlimit1,xtix1,xtixl1)
+      cosmo(gca,titl{3},xlimit1,xtix1,[])
       subplot(4,2,6);
       plot(sub(3,:),'color',[0.6350 0.0780 0.1840]) 
-      cosmo(gca,[],xlimit2,xtix2,xtixl2)
+      cosmo(gca,[],xlimit2,xtix2,[])
     else
       subplot(4,2,7);
       plot(FourChan(4,:),'color',[0 0.4470 0.7410])
       hold on
-      plot(mavgFourChan)
+      plot(mavgFourChan,'LineWidth',1.75)
       %yline(avg)
       xlabel('Time [s]')
       ylim([min(FourChan(4,:))-abs(.01*min(FourChan(4,:))) max(FourChan(4,:))+(.01*max(FourChan(4,:)))])
@@ -139,7 +139,7 @@ for file = firstfile:lastfile
       subplot(4,2,8);
       plot(sub(4,:),'color',[0 0.4470 0.7410])
       hold on
-      plot(mavgsub)
+      plot(mavgsub,'LineWidth',1.75)
       xlabel('Time [s]')
       cosmo(gca,[],xlimit2,xtix2,xtixl2)
     end
