@@ -13,8 +13,9 @@ function [tsample1,cross,mc,mcloc] = chcross(FourChan,rlens,xver)
 %  
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 10/30/2020
-
+% Originally written by tschuh@princeton.edu, 10/30/2020
+% Last modified by tschuh@princeton.edu, 12/15/2020
+  
 %working code
 
 %zero-out the time channel of FourChan  
