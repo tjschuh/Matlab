@@ -16,8 +16,9 @@ function [FourChanT1,jumps] = challocate(FourChan)
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 10/09/2020
-
+% Originally written by tschuh@princeton.edu, 10/09/2020
+% Last modified by tschuh@princeton.edu, 12/15/2020
+  
 % This is the channel allocator
 % It goes through each row of FourChan, looks for the "Timestamp"
 % channel, and organizes the other channels based on its location
