@@ -15,7 +15,8 @@ function [FourChan,jumps] = chswitch(FourChan,jumps)
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 09/04/2020
+% Originally written by tschuh@princeton.edu, 09/04/2020
+% Last modified by tschuh@princeton.edu, 12/15/2020
   
 % This is the channel switcher
 % If a file has a "jump" in it, this script is called to find
