@@ -15,8 +15,9 @@ function [shiplocations,beacon] = testlocate(xymin,xymax,npoints,nturns)
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 11/13/2020
-
+% Originally written by tschuh@princeton.edu, 11/13/2020
+% Last modified by tschuh@princeton.edu, 12/15/2020
+  
 %need to add time coordinate still!
   
 %min x/y-value for shiplocations rng
