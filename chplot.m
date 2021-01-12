@@ -13,8 +13,9 @@ function chplot(firstfile,lastfile,rseg,plotver,xver)%,blah)
 %  
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
-% Written by tschuh@princeton.edu, 10/09/2020
-
+% Originally written by tschuh@princeton.edu, 10/09/2020
+% Last modified by tschuh@princeton.edu, 12/17/2020
+  
 % By default, plotting feature is turned on
 defval('plotver',1);
 % By default, cross-correlation feature is turned off
