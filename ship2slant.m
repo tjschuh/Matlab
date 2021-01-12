@@ -13,7 +13,8 @@ function varargout=ship2slant(x,y,t,x0,y0,z0,c,z)
 % sr        Slant range
 % st        Slant time
 %
-% Last modified by tschuh-at-princeton.edu on Dec 18th, 2020
+% Originally written by tschuh@princeton.edu on 12/18/2020
+% Last modified by tschuh@princeton.edu on 12/18/2020
 
 % Default sound speed profile
 defval('c',1500)
