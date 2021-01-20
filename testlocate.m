@@ -1,6 +1,6 @@
 function [shiplocations,beacon] = testlocate(xymin,xymax,npoints,nturns)
 % [shiplocations,beacon] = TESTLOCATE(xymin,xymax,npoints,nturns)
-%
+% ...
 % INPUT:
 %
 % xymin           min value for rng to pick x and y starting coordinates for shiplocations
