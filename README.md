@@ -1,3 +1,3 @@
 # MATLAB
 
-Repository containing MATLAB scripts. 
+Repository containing research-related MATLAB functions.
