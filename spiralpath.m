@@ -1,5 +1,5 @@
-function [shiplocations,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
-% [shiplocations,beacon] = SPIRALPATH(xymin,xymax,npoints,nturns,waves)
+function shiplocations = spiralpath(xymin,xymax,npoints,nturns,waves)
+% shiplocations = SPIRALPATH(xymin,xymax,npoints,nturns,waves)
 %
 % INPUT:
 %
@@ -12,13 +12,14 @@ function [shiplocations,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
 % OUTPUT:
 %
 % shiplocations   matrix containing (x,y,z) coordinates of a "ship" traveling in a sprial
-% beacon          true location of "beacon" on seafloor
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Originally written by tschuh@princeton.edu, 11/13/2020
-% Last modified by tschuh@princeton.edu, 2/2/2021
-  
+% Last modified by tschuh@princeton.edu, 2/3/2021
+
+% This function creates an RNG spiral path of a "ship on the ocean"
+
 %need to add time coordinate still!
   
 % min x/y-value for shiplocations rng
@@ -27,11 +28,14 @@ defval('xymin',-100);
 % max x/y-value for shiplocations rng
 defval('xymax',100);
 
-% min z-value for shiplocations rng
+% min z-value for shiplocations rng [m]
 zmin = 975;
 
-% max z-value for shiplocations rng
+% max z-value for shiplocations rng [m]
 zmax = 1025;
+
+% nominal ocean depth [m]
+z0 = 1000;
 
 % number of data points
 defval('npoints',100);
@@ -47,7 +51,7 @@ if exist('shiplocations','var') == 0
   beacon = [xymin+(xymax-xymin)*rand xymin+(xymax-xymin)*rand 0];
   
   % randomly produce shiplocations in a spiral manner with "waves"
-  pos = [0 0; xymin+(xymax-xymin)*rand xymin+(xymax-xymin)*rand]; %[startpoint;endpoint]
+  pos = [xymin+(xymax-xymin)*rand xymin+(xymax-xymin)*rand; 0 0]; %[startpoint;endpoint]
   % sprial path engine
   dp = diff(pos,1,1);
   R = hypot(dp(1), dp(2));
@@ -59,7 +63,7 @@ if exist('shiplocations','var') == 0
 
   % waves section
   if waves == 0 %if user doesn't want waves, all z-coordinates are equal 
-    shiplocations(:,3) = 1000; %shiplocations z-coordinate
+    shiplocations(:,3) = z0; %shiplocations z-coordinate
   else %if user wants waves, z-coordinates are randomly chosen between zmin and zmax
     shiplocations(:,3) = zmin + (zmax-zmin)*rand(1,100); %shiplocations z-coordinate between (zmin,zmax)
   end
