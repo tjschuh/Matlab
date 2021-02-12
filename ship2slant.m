@@ -1,5 +1,5 @@
-function beacon = ship2slant(path,c,z)
-% []=SHIP2SLANT()
+function [sr,st] = ship2slant(path,c,z)
+% [sr,st]=SHIP2SLANT(path,c,z)
 %
 % INPUT:  
 %
@@ -12,19 +12,27 @@ function beacon = ship2slant(path,c,z)
 % st        Slant time
 %
 % Originally written by tschuh@princeton.edu, 12/18/2020
-% Last modified by tschuh@princeton.edu, 2/5/2021
+% Last modified by tschuh@princeton.edu, 2/12/2021
   
 % Default ship trajectory is spiral
 defval('path','spiral')
 
+% when I eventually add more path options, use switch/case
 % if path = spiral, call spiralpath to generate shiplocations and drop-off point
 if strcmp(path,'spiral') == 1
   [ship,beacon] = spiralpath();
 end
 
+% v = d/t --> c = sr/st --> st = sr/c
+
 % Default sound speed profile
 defval('c',1500)
 defval('z',NaN)
+
+for i = 1:size(ship,1)
+  sr(i,1) = sqrt((ship(i,1)-beacon(i,1))^2 + ...
+	  (ship(i,2)-beacon(i,2))^2 + (ship(i,3)-beacon(i,3))^2);
+end
 
 if nargout > 1
   % Compute the time
