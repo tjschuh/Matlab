@@ -1,5 +1,5 @@
 function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
-% ship = SPIRALPATH(xymin,xymax,npoints,nturns,waves)
+% [ship,beacon] = SPIRALPATH(xymin,xymax,npoints,nturns,waves)
 %
 % INPUT:
 %
@@ -11,12 +11,13 @@ function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
 %
 % OUTPUT:
 %
-% ship   matrix containing (x,y,z,t) coordinates of a "ship" traveling in a sprial
+% ship            matrix containing (x,y,z,t) coordinates of a "ship" traveling in a sprial
+% beacon          matrix containing (x,y,z,t) coordinates of the "beacon" sinking to seafloor
 %
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Originally written by tschuh@princeton.edu, 11/13/2020
-% Last modified by tschuh@princeton.edu, 2/5/2021
+% Last modified by tschuh@princeton.edu, 2/12/2021
 
 % This function creates an RNG spiral path of a ship on the
 % ocean and a geodetic beacon falling to the seafloor  
@@ -37,7 +38,7 @@ zmax = 1025;
 z0 = 1000;
 
 % number of data points
-defval('npoints',100);
+defval('npoints',75);
 
 % number of turns
 defval('nturns',3);
@@ -81,11 +82,14 @@ end
 % calculate beacon locations assuming beacon is dropped off
 % from the very first ship point
 
+% initial drop time
+t0 = 0;
+
 % beacon drop-off point (x0,y0,z0,t0)                                            
-drop = [ship(1,1) ship(1,2) z0 t];
+drop = [ship(1,1) ship(1,2) z0 t0];
 
 % beacon descend velocity [m/sec]
-bv = 1.5;
+bv = 0.5;
 
 beacon(1,:) = drop;
 j = 2;
@@ -98,13 +102,24 @@ for time = tint:tint:ship(end,4)
   j = j + 1;
 end
 
+% need to make beacon have same number of rows as ship
+for m = j+1:size(ship,1)
+  beacon(m,1:3) = beacon(j,1:3);
+  beacon(m,4) = ship(m,4);
+end
+  
 clf
 
 % end with a plot of the spiral ship path and beacon location
-% if you didnt request output
-if nargout == 0
-  scatter3(ship(:,1),ship(:,2),ship(:,3),'^','filled');
-  zlim([0 1000])
+scatter3(ship(:,1),ship(:,2),ship(:,3),'^','filled');
+zlim([0 z0])
+hold on
+scatter3(beacon(:,1),beacon(:,2),beacon(:,3),'*')
+hold on
+for k = 1:size(beacon,1)
+  p1 = [ship(k,1) beacon(k,1)];
+  p2 = [ship(k,2) beacon(k,2)];
+  p3 = [ship(k,3) beacon(k,3)];
+  plot3(p1,p2,p3,':','Color','k')
   hold on
-  scatter3(beacon(:,1),beacon(:,2),beacon(:,3),'*')
 end
