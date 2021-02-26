@@ -12,7 +12,7 @@ function [sr,st] = ship2slant(path,c,z)
 % st        Slant time
 %
 % Originally written by tschuh@princeton.edu, 12/18/2020
-% Last modified by tschuh@princeton.edu, 2/12/2021
+% Last modified by tschuh@princeton.edu, 2/25/2021
   
 % Default ship trajectory is spiral
 defval('path','spiral')
@@ -29,6 +29,7 @@ end
 defval('c',1500)
 defval('z',NaN)
 
+% Compute the slant range
 for i = 1:size(ship,1)
   sr(i,1) = sqrt((ship(i,1)-beacon(i,1))^2 + ...
 	  (ship(i,2)-beacon(i,2))^2 + (ship(i,3)-beacon(i,3))^2);
