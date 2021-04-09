@@ -1,23 +1,24 @@
-function psplot(fname1,fname2)
+function psplot(fnames)
 
-defval('fname1','PORT-bdata30m-equal')
-defval('fname2','STBD-bdata30m-equal')
-  
-a = load(fname1);
-b = load(fname2);
-c = str2num(fname1(11:12));
-d = str2num(fname2(11:12));
+defval('fnames',{'PORT-bdata30m-equal','STBD-bdata30m-equal'})
 
-f = mean(a(:,3));
-g = mean(b(:,3));
+figure(gcf)
+clf
+
 u = 1e8;
 
-ah(1) = subplot(2,1,1);
-plot([0:size(a,1)-1]*c,[a(:,3)-f]*u)
-grid on
-%xlim([])
-%ylim([])
-title(sprintf('%s The Mean is %f',fname1,f))
+for index=1:length(fnames)
+  a = load(fnames{index});
+  c = str2num(fnames{index}(11:12));
+  f = mean(a(:,3));
 
-% cosmetics
-longticks(ah)
+  ah(index) = subplot(length(fnames),1,index);
+
+  plot([0:size(a,1)-1]*c,[a(:,3)-f]*u)
+  grid on
+  title(sprintf('%s The Mean is %f',fname{index},f))
+
+  % Cosmetics
+  longticks(ah)
+end
+
