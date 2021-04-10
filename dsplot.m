@@ -8,7 +8,7 @@ clf
 
 for index=1:length(fnames)
   a{index} = load(fnames{index});
-  c{index} = str2num(fnames{index}(11:12));
+  c{index} = 30;%str2num(fnames{index}(11:12));
 end  
 
 diferm(c{1},c{2})
