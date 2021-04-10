@@ -1,5 +1,5 @@
 function dsplot(fnames,u)
-%DSPLOT(fnames,u)
+% DSPLOT(fnames,u)
 %
 % INPUT:
 %
