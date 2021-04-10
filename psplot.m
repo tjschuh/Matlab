@@ -1,4 +1,15 @@
 function psplot(fnames,cn,u)
+% PSPLOT(fnames,cn,u)
+%
+% INPUT:
+%
+% fnames   input file names, must be 2 files in a cell array
+% cn       column number you want to plot i.e. 1=lat, 2=lon, 3=height, >3=3d distance
+% u        unit multiplier
+%  
+% TESTED ON: 9.8.0.1451342 (R2020a) Update 5
+%
+% Originally written by tschuh@princeton.edu, 4/9/2021
 
 defval('fnames',{'PORT-bdata30m-equal','STBD-bdata30m-equal'})
 defval('cn',3)
