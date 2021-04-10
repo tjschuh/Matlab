@@ -1,5 +1,19 @@
 function dsplot(fnames,u)
-
+%DSPLOT(fnames,u)
+%
+% INPUT:
+%
+% fnames   input file names, must be 2 files in a cell array
+% u        unit multiplier
+%
+% Example:
+%
+% dsplot({'oneofthem','theotherone'})
+%  
+% TESTED ON: 9.8.0.1451342 (R2020a) Update 5
+%
+% Originally written by tschuh@princeton.edu, 4/9/2021
+  
 defval('fnames',{'PORT-bdata30m-equal','STBD-bdata30m-equal'})
 defval('u',1)
 
