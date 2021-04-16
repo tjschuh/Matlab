@@ -38,7 +38,7 @@ zmax = 1025;
 z0 = 1000;
 
 % number of data points
-defval('npoints',75);
+defval('npoints',60);
 
 % number of turns
 defval('nturns',3);
@@ -91,10 +91,16 @@ drop = [ship(1,1) ship(1,2) z0 t0];
 % beacon descend velocity [m/sec]
 bv = 0.5;
 
+% generate random x,y positions for the beacon as it descends with time
 beacon(1,:) = drop;
+x = drop(1);
+y = drop(2);
+spread = 10;
 j = 2;
 for time = tint:tint:ship(end,4)
-  beacon(j,:) = [drop(1) drop(2) z0-bv*time time];
+    x = x+(rand*spread/2)-(rand*spread/2);
+    y = y+(rand*spread/2)-(rand*spread/2);
+    beacon(j,:) = [x y z0-bv*time time];
   if beacon(j,3) <= 0
     beacon(j,3) = 0;
     break
@@ -123,3 +129,6 @@ for k = 1:size(beacon,1)
   plot3(p1,p2,p3,':','Color','k')
   hold on
 end
+xlabel('x [m]')
+ylabel('y [m]')
+zlabel('z [m]')
