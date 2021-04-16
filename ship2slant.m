@@ -8,8 +8,10 @@ function [sr,st] = ship2slant(path,c,z)
 %
 % OUTPUT:
 %
-% sr        Slant range
-% st        Slant time
+% sr        Slant range [m]
+% st        Slant time [s]
+%
+% TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Originally written by tschuh@princeton.edu, 12/18/2020
 % Last modified by tschuh@princeton.edu, 2/25/2021
