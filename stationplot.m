@@ -27,9 +27,9 @@ port(2) = lon2y(port(2));
 ref(2) = lon2y(ref(2));
 
 % Define
-legs={'starboard','port','Refport'};
+legs={'STBD','PORT','Jacksonsville'};
 cols={'b','r','g'};
-symbs={'*','o','s'};
+symbs={'o','s','^'};
 
 % Everywhere below is plotting
 ah=krijetem(subnum(2,1));
