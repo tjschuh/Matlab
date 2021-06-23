@@ -1,4 +1,4 @@
-function velo=velopro()
+function velohr=velopro()
 %velo=VELOPRO()
 %
 % INPUT:
@@ -17,10 +17,16 @@ function velo=velopro()
 load approx_positions
 pos=approx_positions;
 
-velo=zeros(length(pos)-1,1);
+velosc=zeros(length(pos)-1,1);
+velohr=zeros(length(pos)-1,1);
 for i=2:length(pos)
-    velo(i-1,1)=sqrt((pos(i,1)-pos(i-1,1))^2 + (pos(i,2)-pos(i-1,2))^2 + (pos(i,3)-pos(i-1,3))^2);
-    velo(i-1,1)=velo(i-1,1)/3600;
+    velohr(i-1,1)=sqrt((pos(i,1)-pos(i-1,1))^2 + (pos(i,2)-pos(i-1,2))^2 + (pos(i,3)-pos(i-1,3))^2);
+    velosc(i-1,1)=velohr(i-1,1)/3600;
 end
-
-plot(velo)
+plot(velohr,'LineWidth',1.5)
+grid on
+xlim([1 length(pos)-1])
+xlabel('Time [hr]')
+ylabel('Velocity [m/hr]')
+%figure
+%plot(velosc)
