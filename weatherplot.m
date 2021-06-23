@@ -97,7 +97,6 @@ set(f,'renderer','painters')
 figdisp([],sprintf('%i_%i_%i_wdir',bnum,dtype,dyear),'',2,[],'epstopdf')
 
 % plotting wspd
-% error when using figdisp ASK FREDERIK
 figure(2);
 bar(wswh(:,1))
 int=2;
@@ -107,12 +106,11 @@ ylim([floor(min(wswh(:,1)))-(int/2) max(wswh(:,1))+(int/2)])
 ylabel('Wind Speed [m/s]')
 longticks
 grid on
-movev(tt2,+0.2)
+movev(tt2,+0.4)
 figdisp([],sprintf('%i_%i_%i_wspd',bnum,dtype,dyear),'',2,[],'epstopdf')
 %saveas(gcf,'wspd.pdf')
 
 % plotting wvht
-% error when using figdisp ASK FREDERIK
 figure(3);
 bar(wswh(:,2))
 int=0.5;
@@ -122,6 +120,6 @@ ylim([floor(min(wswh(:,2)))-(int/2) max(wswh(:,2))+(int/2)])
 ylabel('Wave Height [m]')
 longticks
 grid on
-movev(tt3,+0.04)
+movev(tt3,+0.05)
 figdisp([],sprintf('%i_%i_%i_wvht',bnum,dtype,dyear),'',2,[],'epstopdf')
 %saveas(gcf,'wvht.pdf');
