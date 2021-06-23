@@ -48,7 +48,7 @@ for i=1:12
 end
 
 % for each month create a polar histogram of wind direction
-figure
+f=figure;
 for j=1:12
     rn=find(any(t.Month==j,2));
     wdir=d{1}(rn(1,1):rn(end,1));
@@ -64,7 +64,9 @@ for j=1:12
     set(gca,'rticklabel',[])
     clear wdir rn
 end
-sgtitle(sprintf('Wind Direction for Year %d',t.Year(1)))
+suptitle(sprintf('Wind Direction for Year %d',t.Year(1)))
+f.Position=[10 10 900 600];
+saveas(gcf,'wdir.pdf')
 
 % plotting wspd
 figure
@@ -76,6 +78,7 @@ ylim([floor(min(wswh(:,1)))-(int/2) max(wswh(:,1))+(int/2)])
 ylabel('Wind Speed [m/s]')
 longticks
 grid on
+saveas(gcf,'wspd.pdf')
 
 % plotting wvht
 figure
@@ -87,3 +90,4 @@ ylim([floor(min(wswh(:,2)))-(int/2) max(wswh(:,2))+(int/2)])
 ylabel('Wave Height [m]')
 longticks
 grid on
+saveas(gcf,'wvht.pdf');
