@@ -1,10 +1,10 @@
-function weatherplot(bnum,fname,ccode)
-% WEATHERPLOT(bnum,fname,ccode)
+function weatherplot(bnum,dtype,dyear)
+% WEATHERPLOT(bnum,dtype,dyear)
 %
 % INPUT:
 %
 % bnum      Buoy number (default: 41049)
-% dtype     Data type 
+% dtype     Data type (default: 1) (2 and 3 don't work yet)
 %           1 Standard meteorological
 %           2 Wave spectral density
 %           3 Supplemental measurements
@@ -52,17 +52,19 @@ figure
 for j=1:12
     rn=find(any(t.Month==j,2));
     wdir=d{1}(rn(1,1):rn(end,1));
-    subplot(4,3,j)
+    subplot(3,4,j)
     polarhistogram(wdir*pi/180+pi)
-    %m=month(t(rn(1,1)),'name');
-    %title(sprintf('%d',m{:}))
+    m=month(t(rn(1,1)),'name');
+    title(sprintf('%s',m{:}))
     ax=gca;
     ax.ThetaDir='clockwise';
     ax.ThetaZeroLocation='top';
     thetaticks([0 45 90 135 180 225 270 315])
     thetaticklabels({'N','NE','E','SE','S','SW','W','NW'})
+    set(gca,'rticklabel',[])
     clear wdir rn
 end
+sgtitle(sprintf('Wind Direction for Year %d',t.Year(1)))
 
 % plotting wspd
 figure
