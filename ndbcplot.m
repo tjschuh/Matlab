@@ -109,9 +109,9 @@ movev(tt1,-0.3)
 set(f,'renderer','painters')
 figdisp([],sprintf('%i_%i_%i_wdir',bnum,dtype,dyear),'',2,[],'epstopdf')
 
-% bar graph of mean wind speed
+% bar graph of mean wind speed and mean significant wave height
 figure(2)
-int=[2 0.5];
+int=[1 0.25];
 fay=20;
 fax=[1.25 1.3];
 cols={'r','b'};
@@ -120,7 +120,11 @@ for index=1:2
     ax(index)=subplot(2,1,index);
     b(index)=bar(wswh(:,index));
     set(b(index),'FaceColor',cols{index})
-    ylim([floor(min(wswh(:,index)))-(int(index)/2) max(wswh(:,index))+(int(index)/2)])
+    if min(wswh(:,index)) < int(index)
+       ylim([0 max(wswh(:,index))+(int(index))])
+    else
+       ylim([min(wswh(:,index))-(int(index)) max(wswh(:,index))+(int(index))])
+    end
     longticks(ax(index),2)
     thh(index)=title(sprintf('Buoy %i Average Monthly %s for Year %d',...
                     bnum,tits{index},t.Year(2)));
