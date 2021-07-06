@@ -17,7 +17,7 @@ function velopro()
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 06/23/2021
-% Last modified by tschuh-at-princeton.edu, 06/29/2021
+% Last modified by tschuh-at-princeton.edu, 07/06/2021
 
 % load in data file
 % column order: X Y Z  YYYY MM DD HH MM SS  YYYY MM DD HH MM SS
@@ -44,25 +44,33 @@ velo=dist;
 velo=velo./1852;
 
 % plotting
+% entire velocity profile
 e=figure;
 plot(t1(2:end),velo,'LineWidth',1.5)
 cosmo
 ylim([0 ceil(max(velo))])
+xt=xticks;
 
+% 1st leg (beginning) of cruise velo profile
 f=figure;
 plot(t1(2:84),velo(1:83),'LineWidth',1.5)
 cosmo
 ylim([0 ceil(max(velo(1:83)))])
+xticks(xt(1)-hours(6):hours(6):xt(end))
 
+% 2nd leg (campaign) of cruise velo profile
 g=figure;
 plot(t1(85:110),velo(84:109),'LineWidth',1.5)
 cosmo
 ylim([0 ceil(max(velo(84:109)))])
+xticks(xt(1):hours(4):xt(end))
 
+% 3rd leg (end) of cruise velo profile
 h=figure;
 plot(t1(110:end),velo(109:end),'LineWidth',1.5)
 cosmo
 ylim([0 ceil(max(velo(109:end)))])
+xticks(xt(1):hours(6):xt(end)+hours(6))
 
 set(e,'renderer','painters')
 set(f,'renderer','painters')
