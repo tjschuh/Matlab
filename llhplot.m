@@ -20,8 +20,13 @@ plot(obsfiles(:,2),obsfiles(:,1))
 hold on
 scatter(obsfiles(:,2),obsfiles(:,1),'filled')
 grid on
-title('June 16 Lat/Lon Ship Coordinates')
+longticks
+tt=title('June 16 Lat/Lon Ship Coordinates');
 xlabel('Longitude [degrees]')
 ylabel('Latitude [degrees]')
 
 set(f,'renderer','painters')
+
+% cosmetics
+%movev(tt,0.003)
+%figdisp([],[],'',2,[],'epstopdf')
