@@ -11,21 +11,32 @@ function llhplot()
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 07/06/2021
+% Last modified by tschuh-at-princeton.edu, 07/15/2021
 
 % load in data file
-load obsfiles.llh
+load solutions1h
+files1=solutions1h; 
+lat1=4;
+lon1=5;
 
-f=figure;
-plot(obsfiles(:,2),obsfiles(:,1))
+load solutions30m
+files2=solutions30m;
+lat2=4;
+lon2=5;
+
+figure
+plot(files1(:,lon1),files1(:,lat1),'b')
 hold on
-scatter(obsfiles(:,2),obsfiles(:,1),'filled')
+plot(files2(:,lon2),files2(:,lat2),'r')
+hold on
+scatter(files1(:,lon1),files1(:,lat1),'filled','c')
+hold on
+scatter(files2(:,lon2),files2(:,lat2),'filled','m')
 grid on
 longticks
 tt=title('June 16 Lat/Lon Ship Coordinates');
 xlabel('Longitude [degrees]')
 ylabel('Latitude [degrees]')
-
-set(f,'renderer','painters')
 
 % cosmetics
 %movev(tt,0.003)
