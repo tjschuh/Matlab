@@ -17,14 +17,15 @@ function velopro()
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 06/23/2021
-% Last modified by tschuh-at-princeton.edu, 07/06/2021
+% Last modified by tschuh-at-princeton.edu, 07/05/2021
 
 % load in data file
-% column order: X Y Z  YYYY MM DD HH MM SS  YYYY MM DD HH MM SS
+% current column order: X Y Z  YYYY MM DD HH MM SS  YYYY MM DD HH MM SS
+% current column order: X Y Z  LT LN HT  YYYY MM DD HH MM SS  YYYY MM DD HH MM SS
 load obsfiles.pos
 pos=obsfiles(:,1:3);
-t1=datetime(obsfiles(:,4:9));
-t2=datetime(obsfiles(:,10:15));
+t1=datetime(obsfiles(:,7:12));
+t2=datetime(obsfiles(:,13:18));
 
 % compute euclidean distance between each xyz position
 % divide by appropriate time interval for desired units
