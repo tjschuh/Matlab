@@ -1,15 +1,25 @@
-function pvp()
-% PVP()
+function pvp(file)
+% PVP(file)
 %
+% compare pre-processed and post-processed positions
+% by adding XYZ coordinates together of both data and
+% taking the difference. plot a 0 if data is unchanged
+% after processing (zero difference), and a 1 if it is
+% changed (non-zero difference)
 %
 % INPUT:
 %
+% file     columnized data file containing XYZ pre-processed (approx) and post-processed positions
+%
 % OUTPUT:
 %
+% histogram-like plot of 0's and 1's (0 = no change via processing, 1 = change)
+%
 % Originally written by tschuh-at-princeton.edu, 07/08/2021
+% Last modified by tschuh-at-princeton.edu, 08/09/2021
 
-load data.ppp
-ppp = data;
+% load data (data.ppp)
+ppp=load(file);
 
 pre = zeros(length(ppp),1);
 post = zeros(length(ppp),1);
