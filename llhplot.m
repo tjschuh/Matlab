@@ -1,37 +1,33 @@
-function llhplot()
-%LLHPLOT()
+function llhplot(file,latc,lonc)
+% LLHPLOT(file,latc,lonc)
 %
 % Takes in data file containing llh positions
 % Produces a 2D lat vs lon position plot
 %
 % INPUT:
 %
+% file     columnized data with lats/lons
+% latc     column number of file containing lat data [default:22]
+% lonc     column number of file containing lon data [default:23]
+%
 % OUTPUT:
+%
+% 2D plot of lat vs lon
 %
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 07/06/2021
-% Last modified by tschuh-at-princeton.edu, 07/15/2021
+% Last modified by tschuh-at-princeton.edu, 08/09/2021
 
-% load in data file
-load solutions1h
-files1=solutions1h; 
-lat1=4;
-lon1=5;
-
-load solutions30m
-files2=solutions30m;
-lat2=4;
-lon2=5;
+% load in data file (data.ppp)
+data=load(file);
+defval('latc',22);
+defval('lonc',23);
 
 figure
-plot(files1(:,lon1),files1(:,lat1),'b')
+plot(data(:,lonc),data(:,latc),'b')
 hold on
-plot(files2(:,lon2),files2(:,lat2),'r')
-hold on
-scatter(files1(:,lon1),files1(:,lat1),'filled','c')
-hold on
-scatter(files2(:,lon2),files2(:,lat2),'filled','m')
+scatter(data(:,lonc),data(:,latc),'filled','c')
 grid on
 longticks
 tt=title('June 16 Lat/Lon Ship Coordinates');
