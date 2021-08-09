@@ -1,5 +1,5 @@
-function velopro()
-%VELOPRO()
+function velopro(file,xcol,t1col,t2col)
+% VELOPRO(file,xcol,t1col,t2col)
 %
 % Takes in data file containing XYZ positions and timestamps
 % Produces a velocity profile from the position data by
@@ -8,24 +8,32 @@ function velopro()
 %
 % INPUT:
 %
-%
+% file       columnized data file containing XYZ positions and timestamps
+% xcol       column number in file where XYZ data begins [default:1]
+% t1col      column number in file where start time begins [default:7]
+% t2col      column number in file where end time begins [default:13]
 %
 % OUTPUT:
 %
-%
+% velocity profile plot
 %
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 06/23/2021
-% Last modified by tschuh-at-princeton.edu, 07/05/2021
+% Last modified by tschuh-at-princeton.edu, 08/09/2021
 
-% load in data file
-% current column order: X Y Z  YYYY MM DD HH MM SS  YYYY MM DD HH MM SS
+% load in data file (obsfiles.pos)
 % current column order: X Y Z  LT LN HT  YYYY MM DD HH MM SS  YYYY MM DD HH MM SS
-load obsfiles.pos
-pos=obsfiles(:,1:3);
-t1=datetime(obsfiles(:,7:12));
-t2=datetime(obsfiles(:,13:18));
+data=load(file);
+    
+defval('xcol',1);
+pos=data(:,xcol:xcol+2);
+
+defval('t1col',7);
+t1=datetime(data(:,t1col:t1col+5));
+
+defval('t2col',13);
+t2=datetime(data(:,t2col:t2col+5));
 
 % compute euclidean distance between each xyz position
 % divide by appropriate time interval for desired units
