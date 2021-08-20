@@ -1,5 +1,5 @@
-function llhplot(file,latc,lonc)
-% LLHPLOT(file,latc,lonc)
+function llhplot(file,llhc,tc)
+% LLHPLOT(file,llhc,tc)
 %
 % Takes in data file containing llh positions
 % Produces a 2D lat vs lon position plot
@@ -7,9 +7,9 @@ function llhplot(file,latc,lonc)
 % INPUT:
 %
 % file     columnized data with lats/lons
-% latc     column number of file containing lat data [default:22]
-% lonc     column number of file containing lon data [default:23]
-%
+% llhc     column number of file where lat,lon,ht data begins [default: 22]
+% tc       column number of file where time begins [default: 7]
+%    
 % OUTPUT:
 %
 % 2D plot of lat vs lon
@@ -18,13 +18,17 @@ function llhplot(file,latc,lonc)
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 07/06/2021
-% Last modified by tschuh-at-princeton.edu, 08/18/2021
+% Last modified by tschuh-at-princeton.edu, 08/20/2021
 
 % load in data file (data.ppp)
 data=load(file);
-defval('latc',22);
-defval('lonc',23);
-htc=24;
+defval('llhc',22);
+latc=llhc;
+lonc=llhc+1;
+htc=llhc+2;
+
+defval('tc',7);
+dat=datetime(data(:,tc:tc+5));
 
 % plot lat and lon
 figure
@@ -38,8 +42,11 @@ surface([lon;lon],[lat;lat],[z;z],[time;time],...
         'edgecol','interp',...
         'linew',1.5);
 % add start date and end date times to colorbar
-colorbar('Ticks',[1,length(data)],...
-         'TickLabels',{'Start','End'})
+st=datestr(dat(1));
+md=datestr(dat(ceil(length(data)/2)));
+ed=datestr(dat(end));
+colorbar('southoutside','Ticks',[1,ceil(length(data)/2),length(data)],...
+         'TickLabels',{st,md,ed})
 hold on
 scatter(lon',lat','filled','k')
 grid on
@@ -61,7 +68,6 @@ ylabel("Height relative to WGS84 [m]")
 xlim([0 length(data)])
 ylim([-max(abs(data(:,htc)))-0.1*max(abs(data(:,htc))) ...
       max(abs(data(:,htc)))+0.1*max(abs(data(:,htc)))])
-keyboard
 
 % cosmetics
 %movev(tt,0.003)
