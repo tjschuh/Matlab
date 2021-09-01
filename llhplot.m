@@ -18,15 +18,21 @@ function llhplot(file,llhc,tc)
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 07/06/2021
-% Last modified by tschuh-at-princeton.edu, 08/24/2021
+% Last modified by tschuh-at-princeton.edu, 08/31/2021
 
 % Problem:
 % not plotting ascii file created from xyzpenlift.m
 % scatter works, but not plot/surface
 % seems to be an issue with the NaNs
+% I think I fixed this with rows part
 
 % load in data file (data.ppp)
 data=load(file);
+
+% remove entire NaN rows
+rows=any(isnan(data),2);
+data(rows,:)=[];
+
 defval('llhc',22);
 latc=llhc;
 lonc=llhc+1;
