@@ -58,6 +58,7 @@ md=datestr(dat(ceil(length(data)/2)));
 ed=datestr(dat(end));
 colorbar('southoutside','Ticks',[1,ceil(length(data)/2),length(data)],...
          'TickLabels',{st,md,ed})
+colormap(jet)
 hold on
 scatter(lon',lat','filled','k')
 grid on
