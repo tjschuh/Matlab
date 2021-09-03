@@ -14,11 +14,13 @@ function xyzpenlift(file,xcol,tcol,velo,loop)
 % xcol   column number in file where XYZ-LLH data begins [default: 19]
 % tcol   column number in file where time begin [default: 7]
 % velo   ship speed used to compute threshold distance triggering NaN replacement [default: 3]
-% loop   number of loop iterations to perform [default: 50] 
+% loop   number of loop iterations to perform [default: 500] 
 %
 % OUTPUT:
 %
 % modified file data.ppp
+%
+% TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 08/20/2021
 % Last modified by tschuh-at-princeton.edu, 08/31/2021
