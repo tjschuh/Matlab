@@ -63,7 +63,7 @@ hold on
 scatter(lon',lat','filled','k')
 grid on
 longticks
-tt=title('June 16 Lat/Lon Ship Coordinates');
+tt=title('June 16, 2020 24 Hours Lat/Lon Ship Coordinates');
 xlabel('Longitude [degrees]')
 ylabel('Latitude [degrees]')
 
@@ -74,7 +74,7 @@ hold on
 scatter(time,data(:,htc),'filled','r')
 grid on
 longticks
-ttt=title("June 16 Ship Heights relative to WGS84");
+ttt=title("June 16, 2020 24 Hours Ship Heights relative to WGS84");
 xlabel("Time [s]")  
 ylabel("Height relative to WGS84 [m]")
 xlim([0 length(data)])
