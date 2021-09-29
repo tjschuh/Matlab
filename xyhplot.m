@@ -3,6 +3,7 @@ function xyhplot(file,llhc)
 %
 % Takes in data file containing llh positions
 % Produces a 2D lat vs lon position plot
+% and a height relative to WGS84 map
 %
 % INPUT:
 %
@@ -41,8 +42,8 @@ for i = 1:length(data)
     [x(i),y(i),utmzone] = deg2utm(data(i,latc),data(i,lonc));
 end
 
-x = x-455691.4;
-y = y-3362215;
+x = x-(min(x)-.05*(max(x)-min(x)));
+y = y-(min(y)-.05*(max(y)-min(y)));
 
 z=zeros(size(x));
 figure
@@ -60,6 +61,8 @@ tt=title('June 11-12, 2020 UTM Ship Coordinates, Unit 1');
 xlabel('X [m]')
 ylabel('Y [m]')
 
+figdisp([],sprintf('map'),'',2,[],'epstopdf') 
+
 % plot height
 figure
 plot(time,data(:,htc),'r')
@@ -74,3 +77,5 @@ xlim([0 length(data)])
 xticks([0:3600:length(data)])
 labels=[0:16];
 xticklabels({'0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'})
+
+figdisp([],sprintf('ht'),'',2,[],'epstopdf') 
