@@ -30,8 +30,7 @@ function llhplot(file,llhc,tc)
 data=load(file);
 
 % remove entire NaN rows
-rows=any(isnan(data),2);
-data(rows,:)=[];
+data = rmNaNrows(data);
 
 defval('llhc',22);
 latc=llhc;
