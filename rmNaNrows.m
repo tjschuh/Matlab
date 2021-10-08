@@ -1,5 +1,5 @@
-function rmNaNrows(data)
-% RMNANROWS(data)
+function data=rmNaNrows(data)
+% data=RMNANROWS(data)
 %
 % given a matrix, if a row has
 % a NaN in even a single column
