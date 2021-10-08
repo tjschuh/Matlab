@@ -14,7 +14,7 @@ function xyzpenlift(file,xcol,tcol,velo,loop)
 % xcol   column number in file where XYZ-LLH data begins [default: 19]
 % tcol   column number in file where time begin [default: 7]
 % velo   ship speed used to compute threshold distance triggering NaN replacement [default: 3]
-% loop   number of loop iterations to perform [default: 500] 
+% loop   number of loop iterations to perform [default: 50] 
 %
 % OUTPUT:
 %
@@ -23,7 +23,7 @@ function xyzpenlift(file,xcol,tcol,velo,loop)
 % TESTED ON: 9.4.0.813654 (R2018a)
 %
 % Originally written by tschuh-at-princeton.edu, 08/20/2021
-% Last modified by tschuh-at-princeton.edu, 08/31/2021
+% Last modified by tschuh-at-princeton.edu, 10/08/2021
 
 % should make inputs like Frederik's penlift.m
 % s.t. you can input ascii or mat file
@@ -45,10 +45,9 @@ defval('loop',50);
 
 % remove entire NaN rows that
 % may exist in data from start
-rows=any(isnan(data),2);
-data(rows,:)=[];
+data = rmNaNrows(data);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % to remove entire sections of glitches that might be stacked
 % on one another we use a for loop such that the first time thru
@@ -60,39 +59,38 @@ data(rows,:)=[];
 
 for k = 1:loop
 
-% Distance between two consecutive points on the sphere
-d = sqrt([diff(data(:,xcol))].^2 + [diff(data(:,xcol+1))].^2 + [diff(data(:,xcol+2))].^2);
+    % Distance between two consecutive points on the sphere
+    d = sqrt([diff(data(:,xcol))].^2 + [diff(data(:,xcol+1))].^2 + [diff(data(:,xcol+2))].^2);
 
-% duration in seconds between consecutive points (use seconds function)
-dat = datetime(data(:,tcol:tcol+5));
-t = seconds(diff(dat));
+    % duration in seconds between consecutive points (use seconds function)
+    dat = datetime(data(:,tcol:tcol+5));
+    t = seconds(diff(dat));
 
-% for every d value check to see if > dlev (threshold distance)
-% if so, that point in the data is a glitch so turn it to NaN
-% dlev is computed based on the ship velocity AND how much time
-% is in-between data points i.e. if 3 seconds have gone by, then
-% the ship could have moved a max 3*velo meters
-for j = 1:length(d)
-    % dlev is the threshold distance
-    % dlev = ship speed [m/s] * data sampling rate [s]
-    % dlev = shipspeed*diff between consecutive times
-    dlev = velo*t(j);
-    if dlev < 1
-        dlev = velo;
-    end    
-    if d(j) > dlev
-        data(j+1,xcol:xcol+5) = NaN;
+    % for every d value check to see if > dlev (threshold distance)
+    % if so, that point in the data is a glitch so turn it to NaN
+    % dlev is computed based on the ship velocity AND how much time
+    % is in-between data points i.e. if 3 seconds have gone by, then
+    % the ship could have moved a max 3*velo meters
+    for j = 1:length(d)
+        % dlev is the threshold distance
+        % dlev = ship speed [m/s] * data sampling rate [s]
+        % dlev = shipspeed*diff between consecutive times
+        dlev = velo*t(j);
+        if dlev < 1
+            dlev = velo;
+        end    
+        if d(j) > dlev
+            data(j+1,xcol:xcol+5) = NaN;
+        end
     end
-end
 
-% remove entire NaN rows that
-% were just created during loop
-rows=any(isnan(data),2);
-data(rows,:)=[];
+    % remove entire NaN rows that
+    % were just created during loop
+    data = rmNaNrows(data);
 
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % output generation
 % save final data file to data.ppp
