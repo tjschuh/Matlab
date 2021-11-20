@@ -38,11 +38,13 @@ time=1:length(data);
 
 % plot x,y coordinates in utm
 %allocate memory for speed
+%convert lat lon to UTM easting and northing in meters
 for i = 1:length(data)
     % can also get utmzone, but need to make another array for that
     [x(i),y(i),utmzone] = deg2utm(data(i,latc),data(i,lonc));
 end
 
+% set the zero for the UTM coordinates based on the min and max of data
 x = x-(min(x)-.05*(max(x)-min(x)));
 y = y-(min(y)-.05*(max(y)-min(y)));
 
@@ -58,7 +60,7 @@ colorbar('southoutside','Ticks',[1,10],...
 
 grid on
 longticks
-tt=title('June 11-12, 2020 UTM Ship Coordinates, Unit 1');
+tt=title('June 11-12, 2020 UTM Ship Coordinates, Unit 4');
 xlabel('X [m]')
 ylabel('Y [m]')
 
@@ -69,14 +71,17 @@ figure
 plot(time,data(:,htc),'r')
 hold on
 scatter(time,data(:,htc),'filled','r')
+%scatter(time(1:100:end),data(1:100:end,htc),'filled','r')
 grid on
 longticks
-ttt=title("June 11-12, 2020 Ship Heights relative to WGS84, Unit 1");
+ttt=title("June 11-12, 2020 Ship Heights relative to WGS84, Unit 4");
 xlabel("Time [hr]")  
 ylabel("Height relative to WGS84 [m]")
 xlim([0 length(data)])
 xticks([0:3600:length(data)])
 labels=[0:16];
 xticklabels({'0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'})
+
+%set(gcf, 'Units', 'pixels', 'Position', [10, 100, 1000, 400]);
 
 figdisp([],sprintf('ht'),'',2,[],'epstopdf') 
