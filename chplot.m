@@ -87,7 +87,8 @@ for file = firstfile:lastfile
   mavgsub = movmean(sub(4,:),maslr);
 
   % Open a figure to not overwrite cross-correlation plot
-  figure
+  f=figure;
+  f.Position = [250 500 1100 600];
 
   % Colors
   color1 = [0 0 0];
@@ -202,8 +203,8 @@ for file = firstfile:lastfile
     %jumps doesnt exist as a variable, so just ignore it
   end
   
-  % Write the PDF image file
-  saveas(gcf,sprintf('file%3.4i.pdf',file));
+  % Save a PDF
+  figdisp(sprintf('file%3.4i',file),[],[],2,[],'epstopdf')
   
   if firstfile == lastfile || file == lastfile
     %if working with 1 file, or working on the last file of a set, don't clf
