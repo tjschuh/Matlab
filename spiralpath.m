@@ -1,5 +1,5 @@
-function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
-% [ship,beacon] = SPIRALPATH(xymin,xymax,npoints,nturns,waves)
+function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves,plt)
+% [ship,beacon] = SPIRALPATH(xymin,xymax,npoints,nturns,waves,plt)
 %
 % INPUT:
 %
@@ -8,6 +8,7 @@ function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
 % npoints         # of data points in ship (integer value) (default is 100)
 % nturns          # of turns in ship spiral path (integer value) (default is 3)
 % waves           switch (1 or 0) to turn on/off "waves" feature (default is off)
+% plt             switch for plotting (1 for on, 0 for off)
 %
 % OUTPUT:
 %
@@ -17,7 +18,7 @@ function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves)
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Originally written by tschuh@princeton.edu, 11/13/2020
-% Last modified by tschuh@princeton.edu, 2/12/2021
+% Last modified by tschuh@princeton.edu, 2/14/2022
 
 % This function creates an RNG spiral path of a ship on the
 % ocean and a geodetic beacon falling to the seafloor  
@@ -45,6 +46,9 @@ defval('nturns',3);
 
 % by default, waves are turned off
 defval('waves',0);
+
+% by default, plotting is turned off
+defval('plt',1);
 
 % start ship and beacon "timer" at 0 seconds
 t = 0;
@@ -116,19 +120,21 @@ end
   
 clf
 
-% end with a plot of the spiral ship path and beacon location
-scatter3(ship(:,1),ship(:,2),ship(:,3),'^','filled');
-zlim([0 z0])
-hold on
-scatter3(beacon(:,1),beacon(:,2),beacon(:,3),'*')
-hold on
-for k = 1:size(beacon,1)
-  p1 = [ship(k,1) beacon(k,1)];
-  p2 = [ship(k,2) beacon(k,2)];
-  p3 = [ship(k,3) beacon(k,3)];
-  plot3(p1,p2,p3,':','Color','k')
-  hold on
+if plt == 1
+    % end with a plot of the spiral ship path and beacon location
+    scatter3(ship(:,1),ship(:,2),ship(:,3),'^','filled');
+    zlim([0 z0])
+    hold on
+    scatter3(beacon(:,1),beacon(:,2),beacon(:,3),'*')
+    hold on
+    for k = 1:size(beacon,1)
+        p1 = [ship(k,1) beacon(k,1)];
+        p2 = [ship(k,2) beacon(k,2)];
+        p3 = [ship(k,3) beacon(k,3)];
+        plot3(p1,p2,p3,':','Color','k')
+        hold on
+    end
+    xlabel('x [m]')
+    ylabel('y [m]')
+    zlabel('z [m]')
 end
-xlabel('x [m]')
-ylabel('y [m]')
-zlabel('z [m]')
