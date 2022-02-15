@@ -1,6 +1,9 @@
 function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves,plt)
 % [ship,beacon] = SPIRALPATH(xymin,xymax,npoints,nturns,waves,plt)
 %
+% Generates an RNG spiral path of a ship on the
+% ocean and a geodetic beacon falling to the seafloor  
+%
 % INPUT:
 %
 % xymin           min value for rng to pick x and y starting coordinates for ship
@@ -18,10 +21,7 @@ function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves,plt)
 % TESTED ON: 9.8.0.1417392 (R2020a) Update 4
 %
 % Originally written by tschuh@princeton.edu, 11/13/2020
-% Last modified by tschuh@princeton.edu, 2/14/2022
-
-% This function creates an RNG spiral path of a ship on the
-% ocean and a geodetic beacon falling to the seafloor  
+% Last modified by tschuh@princeton.edu, 2/15/2022
   
 % min x/y-value for ship rng
 defval('xymin',-100);
@@ -71,7 +71,7 @@ if exist('ship','var') == 0
   if waves == 0 %if user doesn't want waves, all z-coordinates are equal 
     ship(:,3) = z0; %ship z-coordinate
   else %if user wants waves, z-coordinates are randomly chosen between zmin and zmax
-    ship(:,3) = zmin + (zmax-zmin)*rand(1,100); %ship z-coordinate between (zmin,zmax)
+    ship(:,3) = zmin + (zmax-zmin)*rand(1,tint); %ship z-coordinate between (zmin,zmax)
   end
 
   ship = flipud(ship);
@@ -117,24 +117,24 @@ for m = j+1:size(ship,1)
   beacon(m,1:3) = beacon(j,1:3);
   beacon(m,4) = ship(m,4);
 end
-  
-clf
 
 if plt == 1
+    f=figure;
+    f.Position = [675 281 955 680];
     % end with a plot of the spiral ship path and beacon location
     scatter3(ship(:,1),ship(:,2),ship(:,3),'^','filled');
-    zlim([0 z0])
+    zlim([0 1.1*max(ship(:,3))])
     hold on
     scatter3(beacon(:,1),beacon(:,2),beacon(:,3),'*')
-    hold on
     for k = 1:size(beacon,1)
         p1 = [ship(k,1) beacon(k,1)];
         p2 = [ship(k,2) beacon(k,2)];
         p3 = [ship(k,3) beacon(k,3)];
         plot3(p1,p2,p3,':','Color','k')
-        hold on
     end
-    xlabel('x [m]')
-    ylabel('y [m]')
-    zlabel('z [m]')
+    xlabel('x')
+    ylabel('y')
+    zlabel('z')
+
+    figdisp([],[],'',2,[],'epstopdf')
 end
