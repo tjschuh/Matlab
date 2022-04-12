@@ -8,7 +8,7 @@ function [ship,beacon] = spiralpath(xymin,xymax,npoints,nturns,waves,plt)
 %
 % xymin           min value for rng to pick x and y starting coordinates for ship
 % xymax           max value for rng to pick x and y starting coordinates for ship
-% npoints         # of data points in ship (integer value) (default is 100)
+% npoints         # of data points in ship (integer value) (default is 60)
 % nturns          # of turns in ship spiral path (integer value) (default is 3)
 % waves           switch (1 or 0) to turn on/off "waves" feature (default is off)
 % plt             switch for plotting (1 for on, 0 for off)
@@ -30,13 +30,13 @@ defval('xymin',-100);
 defval('xymax',100);
 
 % min z-value for ship rng [m]
-zmin = 975;
+zmin = 5220;
 
 % max z-value for ship rng [m]
-zmax = 1025;
+zmax = 5230;
 
 % nominal ocean depth [m]
-z0 = 1000;
+z0 = 5225;
 
 % number of data points
 defval('npoints',60);
